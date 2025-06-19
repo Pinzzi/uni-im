@@ -1,0 +1,14 @@
+{
+	"name": "im",
+	"uni-app": {
+		"scripts": {}
+	},
+	"dependencies": {
+		"buffer": "^6.0.3",
+		"crypto-js": "^4.2.0",
+		"js-audio-recorder": "^1.0.7",
+		"jsrsasign": "^11.1.0",
+		"secure-random": "^1.1.2",
+		"vue-i18n": "9.1.9"
+	}
+}

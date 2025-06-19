@@ -1,0 +1,12 @@
+{
+  "deng_chu": "Logout",
+  "deng_lu": "Login",
+  "deng_lu_ci_shu_yi_yong_jin": "The number of logins has been exhausted",
+  "deng_lu_shi_bai": "Login failed",
+  "huan_ying_deng_lu": "Welcome",
+  "mi_ma": "Password",
+  "qing_shu_ru_mi_ma": "Please enter your password",
+  "qing_shu_ru_yong_hu_ming": "Please enter your username",
+  "sheng_yu_ji_hui": "Remaining login opportunities",
+  "yong_hu_ming": "Username"
+}
