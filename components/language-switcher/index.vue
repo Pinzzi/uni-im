@@ -48,7 +48,7 @@ export default {
       { value: 'it-IT', label: 'Italiano', flag: 'it-IT' },
       { value: 'ja', label: '日本語', flag: 'ja' },
       { value: 'ko', label: '한국어', flag: 'ko' },
-      { value: 'ms', label: 'Malaysia', flag: 'ms' }, // 区分标准马来语(ms)和马来西亚变体(ms_MY)
+      { value: 'ms-MY', label: 'Malaysia', flag: 'ms-MY' }, // 区分标准马来语(ms)和马来西亚变体(ms_MY)
       { value: 'pt-BR', label: 'Brasileiro', flag: 'pt-BR' },
       { value: 'th', label: 'ภาษา', flag: 'th' },
       { value: 'vi-VN', label: 'Tiếng Việt', flag: 'vi-VN' },
