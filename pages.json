@@ -35,7 +35,7 @@
 	}
 	],
 	"globalStyle": {
-		"navigationBarTitleText": "IM",
+		"navigationBarTitleText": "CECO", // "IM",
 		"navigationBarTextStyle": "black",
 		"navigationBarBackgroundColor": "#F0F0F0",
 		"backgroundColor": "#fdfdfd"
