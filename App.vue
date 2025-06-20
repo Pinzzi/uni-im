@@ -443,30 +443,17 @@ export default {
 <style lang="scss">
 @import url('./static/icon/iconfont.css');
 
-:root {
-  --theme-background: #ffffff;
-  --theme-text: #333333;
-  --theme-secondary-background: #f5f5f5;
-  --theme-transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-[data-theme='dark'] {
-  --theme-background: #1a1a1a;
-  --theme-text: #ffffff;
-  --theme-secondary-background: #2d2d2d;
-}
-
 .theme-switching * {
-  transition: var(--theme-transition);
+  transition: all 0.3s ease-in-out;
 }
 
 .container {
   position: relative;
-  width: 100%; 
+  width: 100%;
   height: 100vh;
-  background-color: var(--theme-background);
+  background-color: var(--theme-bg);
   color: var(--theme-text);
-  transition: var(--theme-transition);
+  transition: all 0.3s ease-in-out;
 }
 
 .tab-page {
@@ -476,8 +463,8 @@ export default {
   /* #ifndef H5 */
   height: calc(100vh);
   /* #endif */
-  background-color: var(--theme-secondary-background);
-  transition: var(--theme-transition);
+  background-color: var(--theme-bg);
+  transition: all 0.3s ease-in-out;
 }
 
 .page {
@@ -487,7 +474,7 @@ export default {
   /* #ifndef H5 */
   height: calc(100vh);
   /* #endif */
-  background-color: var(--theme-secondary-background);
-  transition: var(--theme-transition);
+  background-color: var(--theme-bg);
+  transition: all 0.3s ease-in-out;
 }
 </style>

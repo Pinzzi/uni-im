@@ -79,6 +79,34 @@ export default {
     }
   },
   actions: {
+    // 初始化主题
+    async initTheme({ dispatch, state, getters }) {
+      try {
+        // 获取存储的主题设置
+        const savedTheme = uni.getStorageSync('current_theme')
+
+        // 如果有已保存的主题且主题存在，使用已保存的主题
+        if (savedTheme && state.themes[savedTheme]) {
+          await dispatch('switchTheme', savedTheme)
+        } else {
+          // 使用默认主题
+          await dispatch('switchTheme', 'default')
+        }
+
+        // 确保主题变量被正确应用
+        const themeVars = getters.themeVariables
+        if (themeVars) {
+          applyThemeVariables(themeVars)
+        }
+
+        return true
+      } catch (e) {
+        console.error('Failed to initialize theme:', e)
+        await dispatch('switchTheme', 'default')
+        return false
+      }
+    },
+
     // 切换主题
     async switchTheme({ commit, getters, state }, themeName) {
       if (!state.themes[themeName]) {
@@ -89,7 +117,7 @@ export default {
       try {
         // 添加主题切换过渡class
         document.body.classList.add('theme-switching')
-        
+
         // 更新状态
         commit('SET_THEME', themeName)
 
@@ -98,7 +126,9 @@ export default {
         applyThemeVariables(themeVars)
 
         // 更新应用名称
-        updateAppName(getters.themeConfig.appName)
+        if (getters.themeConfig && getters.themeConfig.appName) {
+          updateAppName(getters.themeConfig.appName)
+        }
 
         // 存储主题偏好
         await uni.setStorage({
@@ -122,23 +152,6 @@ export default {
         console.error('Theme switch failed:', error)
         document.body.classList.remove('theme-switching')
         return false
-      }
-    },
-
-    // 初始化主题
-    async initTheme({ dispatch, state }) {
-      try {
-        // 获取存储的主题设置
-        const savedTheme = uni.getStorageSync('current_theme')
-        if (savedTheme && state.themes[savedTheme]) {
-          await dispatch('switchTheme', savedTheme)
-        } else {
-          // 使用默认主题
-          await dispatch('switchTheme', 'default')
-        }
-      } catch (e) {
-        console.error('Failed to initialize theme:', e)
-        await dispatch('switchTheme', 'default')
       }
     }
   }

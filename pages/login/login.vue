@@ -21,6 +21,7 @@
 				<text>{{ $t('sheng_yu_ji_hui') }}: {{ remainingAttempts }}</text>
 			</view>
 			<button :disabled="isLocked" @click="submit" type="primary">{{ $t('deng_lu') }}</button>
+			<button class="login_btn">注册</button>
 		</uni-forms>
 		<uni-popup ref="deviceVerifyPopup" type="dialog">
 			<uni-popup-dialog 
@@ -109,7 +110,7 @@ export default {
 			}
 			const deviceLockout = this.$store.state.deviceLockouts?.[this.deviceFingerprint] || 0
 			return deviceLockout > Date.now()
-		}
+		},
 	},
 
 	methods: {
@@ -292,6 +293,12 @@ export default {
 	button[disabled] {
 		opacity: 0.6;
 		cursor: not-allowed;
+	}
+
+	.login_btn {
+		padding: 6px 10px;
+		font-size: 17px;
+		background-color: var(--primary-color);
 	}
 }
 </style>

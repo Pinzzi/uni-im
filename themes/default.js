@@ -2,17 +2,65 @@
 export default {
   name: 'default', 
   displayName: '默认主题',
+
   // 主题变量
   variables: {
+    // 主色
     'primary': '#007AFF',
-    'accent': '#4CD964', 
+    'primary-color': '#007AFF',
+    'primary-color-hover': '#409EFF',
+    'primary-color-pressed': '#0060CB',
+    'primary-color-disabled': '#0A84FF40',
+    
+    // 辅助色
+    'secondary': '#32D74B',
+    'secondary-color': '#32D74B',
+    'success': '#32D74B',
+    'success-color': '#32D74B',
+    'warning': '#FF9F0A',
+    'warning-color': '#FF9F0A',
+    'error': '#FF453A',
+    'error-color': '#FF453A',
+    'info': '#64748B',
+    'info-color': '#64748B',
+    
+    // 背景色
     'bg': '#FFFFFF',
+    'bg-color': '#FFFFFF',
+    'bg-color-base': '#FFFFFF',
+    'bg-color-secondary': '#F5F5F5',
+    'bg-color-tertiary': '#FAFAFA',
+    
+    // 文字颜色
     'text': '#333333',
+    'text-color': '#333333',
+    'text-color-primary': '#333333',
+    'text-color-secondary': '#666666',
+    'text-color-disabled': '#999999',
+    
+    // 边框颜色
     'border': '#E5E5E5',
-    'chat': '#F1F1F1',
-    'chatText': '#333333',
-    'nav': '#FFFFFF',
-    'navText': '#333333'
+    'border-color': '#E5E5E5',
+    'border-color-base': '#E5E5E5',
+    'border-color-light': '#F0F0F0',
+    
+    // 功能色
+    'mask': 'rgba(0, 0, 0, 0.6)',
+    'mask-color': 'rgba(0, 0, 0, 0.6)',
+    'scrollbar': '#E5E5E5',
+    'scrollbar-color': '#E5E5E5',
+    
+    // 组件相关
+    'chat-bubble': '#F1F1F1',
+    'chat-bubble-bg': '#F1F1F1',
+    'chat-bubble-text': '#333333',
+    'navbar': '#FFFFFF',
+    'navbar-bg': '#FFFFFF',
+    'navbar-text': '#333333',
+    'sidebar': '#F5F5F5',
+    'sidebar-bg': '#F5F5F5',
+    'card': '#FFFFFF',
+    'card-bg': '#FFFFFF'
   },
   // 主题配置
   config: {

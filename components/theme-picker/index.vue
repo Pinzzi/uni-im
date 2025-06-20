@@ -29,16 +29,17 @@ export default {
     })
 
     const themes = computed(() => {
+      const themeStore = store.state.themeStore.themes;
       return [
         {
           name: 'default',
-          label: uni.$t('mo_ren_zhu_ti'), // 默认主题
-          primaryColor: '#2979ff'
+          label: uni.$t('mo_ren_zhu_ti'),
+          primaryColor: themeStore.default.variables['primary-color']
         },
         {
           name: 'dark',
-          label: uni.$t('an_hei_zhu_ti'), // 暗黑主题
-          primaryColor: '#1c1c1e'
+          label: uni.$t('an_hei_zhu_ti'),
+          primaryColor: themeStore.dark.variables['primary-color']
         }
       ]
     })
@@ -72,7 +73,6 @@ export default {
   }
 
   .theme-icon:hover {
-    background: linear-gradient(135deg, #ebedf0, #d8dcdf);
     box-shadow: 0 4px 4px rgba(0, 0, 0, 0.06),
                 0 8px 8px rgba(0, 0, 0, 0.09),
                 0 12px 12px rgba(0, 0, 0, 0.12);
@@ -82,7 +82,7 @@ export default {
 
   .theme-list {
     padding: 16px;
-    background-color: #fff;
+    background-color: var(--theme-bg);
     border-radius: 16px 16px 0 0;
 
     .theme-item {
@@ -91,6 +91,7 @@ export default {
       padding: 12px 0;
       gap: 8px;
       cursor: pointer;
+      color: var(--theme-text);
 
       &:active {
         opacity: 0.7;
@@ -100,12 +101,11 @@ export default {
         width: 24px;
         height: 24px;
         border-radius: 12px;
-        margin-right: 12px;
       }
 
       .theme-name {
         font-size: 16px;
-        color: #333;
+        color: var(--theme-text);
       }
     }
   }
