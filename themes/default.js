@@ -13,8 +13,8 @@ export default {
     'primary-color-disabled': '#0A84FF40',
     
     // 辅助色
-    'secondary': '#32D74B',
-    'secondary-color': '#32D74B',
+    'secondary': '#afcbf9',
+    'secondary-color': '#afcbf9',
     'success': '#32D74B',
     'success-color': '#32D74B',
     'warning': '#FF9F0A',
@@ -32,9 +32,9 @@ export default {
     'bg-color-tertiary': '#FAFAFA',
     
     // 文字颜色
-    'text': '#333333',
-    'text-color': '#333333',
-    'text-color-primary': '#333333',
+    'text': '#efefef',
+    'text-color': '#efefef',
+    'text-color-primary': '#233333',
     'text-color-secondary': '#666666',
     'text-color-disabled': '#999999',
     

@@ -31,7 +31,7 @@ export default {
     'bg-color-tertiary': '#2C2C2E',
 
     // 文字颜色
-    'text': '#FFFFFF',
+    'text': '#ff0000',
     'text-color': '#FFFFFF',
     'text-color-primary': '#FFFFFF',
     'text-color-secondary': '#EBEBF599',

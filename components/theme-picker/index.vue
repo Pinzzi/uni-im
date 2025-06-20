@@ -39,7 +39,7 @@ export default {
         {
           name: 'dark',
           label: uni.$t('an_hei_zhu_ti'),
-          primaryColor: themeStore.dark.variables['primary-color']
+          primaryColor: '#233333'
         }
       ]
     })

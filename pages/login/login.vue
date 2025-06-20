@@ -21,7 +21,7 @@
 				<text>{{ $t('sheng_yu_ji_hui') }}: {{ remainingAttempts }}</text>
 			</view>
 			<button :disabled="isLocked" @click="submit" type="primary">{{ $t('deng_lu') }}</button>
-			<button class="login_btn">注册</button>
+			<button class="reg_btn">注册</button>
 		</uni-forms>
 		<uni-popup ref="deviceVerifyPopup" type="dialog">
 			<uni-popup-dialog 
@@ -250,55 +250,65 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 :deep(.uni-popup) {
   z-index: 9999 !important;
 }
 
 .login-form {
-	margin: 50rpx;
+  margin: 50rpx;
+  padding: 20rpx;
+  background-color: var(--bg-color, #FFFFFF);
 
-	.header-tools {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		margin-bottom: 30rpx;
+  .header-tools {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30rpx;
 
-		:first-child {
-			order: 2;  /* 主题切换器放右边 */
-		}
+    :first-child {
+      order: 2;  /* 主题切换器放右边 */
+    }
 
-		:nth-child(2),
-		:nth-child(3) {
-			order: 1;  /* 语言相关组件放左边 */
-		}
-	}
+    :nth-child(2),
+    :nth-child(3) {
+      order: 1;  /* 语言相关组件放左边 */
+    }
+  }
 
-	.login-title {
-		margin-top: 100rpx;
-		margin-bottom: 100rpx;
-		color: royalblue;
-		text-align: center;
-		font-size: 60rpx;
-		font-weight: 600;
-	}
+  .login-title {
+    margin-top: 100rpx;
+    margin-bottom: 100rpx;
+    color: var(--text-color, #333333);
+    text-align: center;
+    font-size: 60rpx;
+    font-weight: 600;
+  }
 
-	.login-tip {
-		margin: 20rpx 0;
-		color: #f56c6c;
-		font-size: 24rpx;
-		text-align: center;
-	}
+  .login-tip {
+    margin: 20rpx 0;
+    color: var(--error-color, #FF453A);
+    font-size: 24rpx;
+    text-align: center;
+  }
 
-	button[disabled] {
-		opacity: 0.6;
-		cursor: not-allowed;
-	}
+  button {
+    width: 100%;
+    margin-bottom: 20rpx;
+    background-color: var(--primary-color, #007AFF);
+    color: #FFFFFF;
 
-	.login_btn {
-		padding: 6px 10px;
-		font-size: 17px;
-		background-color: var(--primary-color);
-	}
+    &[disabled] {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    &.reg_btn {
+      padding: 6px 10px;
+      font-size: 17px;
+      background-color: var(--theme-secondary-color);
+      color: var(--theme-text);
+    }
+  }
 }
 </style>
