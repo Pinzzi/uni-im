@@ -15,10 +15,14 @@
 						color="darkred"></uni-icons>
 				</view>
 				<text>
-					昵称 ：{{userInfo.nickName}}
+					<span>昵称</span>
+					<span> ：</span>
+					<span>{{userInfo.nickName}}</span>
 				</text>
 				<text>
-					签名 ：{{userInfo.signature}}
+					<span>签名</span>
+					<span> ：</span>
+					<span>{{userInfo.signature}}</span>
 				</text>
 			</view>
 		</view>

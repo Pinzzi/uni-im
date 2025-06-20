@@ -1,15 +1,20 @@
 <template>
   <view class="language-switcher">
     <view class="current-language" @click="toggleLanguageList">
-      <image class="flag-icon" src="/static/image/language-switcher.png" mode="aspectFit" />
-      <text class="language-label">{{ selectedLabel }}</text>
       <uni-icons 
         :type="showList ? 'top' : 'bottom'" 
         size="16" 
         color="#333" 
         class="arrow-icon"
       />
+      <image class="flag-icon" src="/static/image/language-switcher.png" mode="aspectFit" />
+      <text class="language-label">{{ selectedLabel }}</text>
     </view>
+
+    <!-- 只有icon不显示当前语言 -->
+    <!-- <view  @click="toggleLanguageList">
+      <image class="switcher-icon" src="/static/image/language-switcher.png" mode="aspectFit" />
+    </view> -->
     
     <view v-if="showList" class="language-list">
       <view 
@@ -157,7 +162,9 @@ export default {
 
 .current-language {
   display: flex;
+  flex-direction: row;
   align-items: center;
+  gap: 8rpx;
   padding: 10px 15px;
   border-radius: 30px;
   background: linear-gradient(135deg, #f5f7fa, #e4e7eb);
@@ -173,12 +180,20 @@ export default {
   transform: translateY(-2px);
 }
 
+.switcher-icon {
+  width: 24px;
+  height: 24px;
+  border-radius: 2px;
+  object-fit: cover;
+  order: 1;
+}
+
 .flag-icon {
   width: 24px;
   height: 18px;
-  margin-right: 10px;
   border-radius: 2px;
   object-fit: cover;
+  order: 1;
 }
 
 .language-label {
@@ -186,11 +201,12 @@ export default {
   font-weight: 500;
   color: #2d3748;
   flex-grow: 1;
+  order: 2;
 }
 
 .arrow-icon {
-  margin-left: 8px;
   transition: transform 0.3s ease;
+  order: 3;
 }
 
 .language-list {

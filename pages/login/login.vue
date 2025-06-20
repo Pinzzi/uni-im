@@ -1,11 +1,14 @@
 <template>
 	<view class="login-form">
-		<language-switch-transition
-			v-if="languageTransition" 
-			:lang-flag="languageTransition.langFlag"
-			:lang-name="languageTransition.langName"
-		/>
-		<LanguageSwitcher />
+		<view class="header-tools">
+			<theme-picker />
+			<language-switch-transition
+				v-if="languageTransition" 
+				:lang-flag="languageTransition.langFlag"
+				:lang-name="languageTransition.langName"
+			/>
+			<LanguageSwitcher />
+		</view>
 		<view class="login-title">{{ $t('huan_ying_deng_lu') }}</view>
 		<uni-forms style="margin-top: 100px;" :modelValue="loginForm" :rules="rules" validate-trigger="bind" ref="loginFormRef">
 			<uni-forms-item name="userName">
@@ -14,7 +17,7 @@
 			<uni-forms-item name="password">  
 				<uni-easyinput type="password" v-model="loginForm.password" prefix-icon="locked" :placeholder="$t('mi_ma')" />
 			</uni-forms-item>
-			<view class="login-tip">
+			<view class="login-tip" v-if="hasLoginButRejected">
 				<text>{{ $t('sheng_yu_ji_hui') }}: {{ remainingAttempts }}</text>
 			</view>
 			<button :disabled="isLocked" @click="submit" type="primary">{{ $t('deng_lu') }}</button>
@@ -37,13 +40,15 @@ import { useStore } from 'vuex'
 import { computed } from 'vue' 
 import LanguageSwitcher from '@/components/language-switcher/index.vue'
 import languageSwitchTransition from '@/components/language-switch-transition/index.vue'
+import ThemePicker from '@/components/theme-picker/index.vue'
 import { encryptData } from '../../common/crypto.js';
 import { deviceFingerprint } from '../../utils/device'
 
 export default {
 	components: {
 		LanguageSwitcher,
-		languageSwitchTransition
+		languageSwitchTransition,
+		ThemePicker
 	},
 
 	setup() {
@@ -85,6 +90,7 @@ export default {
 			lockoutDuration: 30 * 60 * 1000, // 30分钟
 			lockoutTime: 0,
 			verificationCode: '',
+			hasLoginButRejected: false,
 			isNewDevice: false
 		}
 	},
@@ -142,7 +148,7 @@ export default {
 		async submit() {
 			if(this.isLocked) {
 				uni.showToast({
-					title: this.$t('deng_lu_yi_suo_ding'),
+					title: '登陆已锁定',
 					icon: 'none'
 				});
 				return;
@@ -194,7 +200,7 @@ export default {
 				this.handleLoginSuccess(loginInfo);
 			} catch(error) {
 				uni.showToast({
-					title: this.$t('yan_zheng_ma_cuo_wu'),
+					title: '验证码错误',
 					icon: 'none'
 				});
 			}
@@ -215,6 +221,7 @@ export default {
 		},
 
 		handleLoginError(error) {
+			this.hasLoginButRejected = true
 			this.recordLoginAttempt()
 			if(this.deviceAttempts[this.deviceFingerprint] >= this.maxAttempts) {
 				uni.showToast({
@@ -245,6 +252,22 @@ export default {
 <style lang="scss" scoped>
 .login-form {
 	margin: 50rpx;
+
+	.header-tools {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		margin-bottom: 30rpx;
+
+		:first-child {
+			order: 2;  /* 主题切换器放右边 */
+		}
+
+		:nth-child(2),
+		:nth-child(3) {
+			order: 1;  /* 语言相关组件放左边 */
+		}
+	}
 
 	.login-title {
 		margin-top: 100rpx;

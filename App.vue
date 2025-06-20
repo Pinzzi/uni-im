@@ -17,9 +17,8 @@
 </template>
 
 <script>
-import store from './store';
 import { useStore } from 'vuex'
-import { ref, computed, nextTick, onMounted } from 'vue'
+import { ref, computed, nextTick, onMounted, provide, getCurrentInstance } from 'vue'
 import http from './common/request';
 import * as enums from './common/enums';
 import * as wsApi from './common/wssocket';
@@ -27,25 +26,288 @@ import UNI_APP from '@/.env.js'
 import languageSwitchTransition from '@/components/language-switch-transition/index.vue'
 
 export default {
-	components: {
-		languageSwitchTransition
-	},
-	setup() {
-		const store = useStore()
-		const isReady = ref(false)
-		const languageTransition = computed(() => store.state.transitionStore.languageTransition)
+  components: {
+    languageSwitchTransition
+  },
+  setup() {
+    const { proxy } = getCurrentInstance()
+    const store = useStore()
+    const isReady = ref(false)
+    const audioTip = ref(null)
+    const languageTransition = computed(() => store.state.transitionStore.languageTransition)
+    
+    const playAudioTip = () => {
+      audioTip.value = uni.createInnerAudioContext()
+      audioTip.value.src = '/static/audio/tip.wav'
+      audioTip.value.play()
+    }
+    
+    // 添加消息处理方法
+    const handlePrivateMessage = (msg) => {
+      if (msg.type == enums.MESSAGE_TYPE.LOADDING) {
+        store.commit("loadingPrivateMsg", JSON.parse(msg.content))
+        return;
+      }
+      if (msg.type == enums.MESSAGE_TYPE.READED) {
+        store.commit("resetUnreadCount", {
+          type: 'PRIVATE',
+          targetId: msg.recvId
+        })
+        return;
+      }
+      if (msg.type == enums.MESSAGE_TYPE.RECEIPT) {
+        store.commit("readedMessage", { friendId: msg.sendId })
+        return;
+      }
+      msg.selfSend = msg.sendId == store.state.userStore.userInfo.id;
+      let friendId = msg.selfSend ? msg.recvId : msg.sendId;
+      loadFriendInfo(friendId).then((friend) => {
+        insertPrivateMessage(friend, msg);
+      })
+    }
 
-		onMounted(async () => {
-			// 确保store和i18n都已经准备好
-			await nextTick()
-			isReady.value = true
-		})
+    const handleGroupMessage = (msg) => {
+      if (msg.type == enums.MESSAGE_TYPE.LOADDING) {
+        store.commit("loadingGroupMsg",JSON.parse(msg.content))
+        return;
+      }
+      if (msg.type == enums.MESSAGE_TYPE.READED) {
+        let chatInfo = {
+          type: 'GROUP',
+          targetId: msg.groupId
+        }
+        store.commit("resetUnreadCount", chatInfo)
+        return;
+      }
+      if (msg.type == enums.MESSAGE_TYPE.RECEIPT) {
+        let msgInfo = {
+          id: msg.id,
+          groupId: msg.groupId,
+          readedCount: msg.readedCount,
+          receiptOk: msg.receiptOk
+        };
+        store.commit("updateMessage", msgInfo)
+        return;
+      }
+      msg.selfSend = msg.sendId == store.state.userStore.userInfo.id;
+      loadGroupInfo(msg.groupId).then((group) => {
+        insertGroupMessage(group, msg);
+      })
+    }
 
-		return {
-			isReady,
-			languageTransition
-		}
-	},
+    const insertPrivateMessage = (friend, msg) => {
+      if (msg.type >= enums.MESSAGE_TYPE.RTC_CALL_VOICE &&
+        msg.type <= enums.MESSAGE_TYPE.RTC_CANDIDATE) {
+        // #ifdef MP-WEIXIN
+          return;
+        // #endif
+        if(msg.type == enums.MESSAGE_TYPE.RTC_CALL_VOICE 
+          || msg.type == enums.MESSAGE_TYPE.RTC_CALL_VIDEO){
+          let mode = msg.type == enums.MESSAGE_TYPE.RTC_CALL_VIDEO? "video":"voice";
+          let pages = getCurrentPages();
+          let curPage = pages[pages.length-1].route;
+          if(curPage != "pages/chat/chat-video"){
+            const friendInfo = encodeURIComponent(JSON.stringify(friend));
+            uni.navigateTo({
+              url: `/pages/chat/chat-video?mode=${mode}&friend=${friendInfo}&isHost=false`
+            })
+          }
+        }
+        setTimeout(() => {
+          uni.$emit('WS_RTC',msg);
+        },500)
+        return;
+      }
+
+      let chatInfo = {
+        type: 'PRIVATE',
+        targetId: friend.id,
+        showName: friend.nickName,
+        headImage: friend.headImage
+      };
+      store.commit("openChat", chatInfo);
+      store.commit("insertMessage", msg);
+      !msg.selfSend && playAudioTip();
+    }
+
+    const insertGroupMessage = (group, msg) => {
+      let chatInfo = {
+        type: 'GROUP',
+        targetId: group.id,
+        showName: group.remark,
+        headImage: group.headImageThumb
+      };
+      store.commit("openChat", chatInfo);
+      store.commit("insertMessage", msg);
+      !msg.selfSend && playAudioTip();
+    }
+
+    const loadFriendInfo = (id) => {
+      return new Promise((resolve, reject) => {
+        let friend = store.getters.findFriend(id);
+        if (friend) {
+          resolve(friend);
+        } else {
+          http({
+            url: `/friend/find/${id}`,
+            method: 'GET'
+          }).then((friend) => {
+            store.commit("addFriend", friend);
+            resolve(friend)
+          })
+        }
+      });
+    }
+
+    const loadGroupInfo = (id) => {
+      return new Promise((resolve, reject) => {
+        let group = store.state.groupStore.groups.find((g) => g.id == id);
+        if (group) {
+          resolve(group);
+        } else {
+          http({
+            url: `/group/find/${id}`, 
+            method: 'GET'
+          }).then((group) => {
+            resolve(group)
+            store.commit("addGroup", group);
+          })
+        }
+      });
+    }
+
+    const pullPrivateOfflineMessage = (minId) => {
+      store.commit("loadingPrivateMsg",true)
+      http({
+        url: "/message/private/pullOfflineMessage?minId=" + minId,
+        method: 'GET'
+      }).catch(()=>{
+        store.commit("loadingPrivateMsg",false)
+      })
+    }
+
+    const pullGroupOfflineMessage = (minId) => {
+      store.commit("loadingGroupMsg",true)
+      http({
+        url: "/message/group/pullOfflineMessage?minId=" + minId,
+        method: 'GET'
+      }).catch(()=>{
+        store.commit("loadingGroupMsg",false)
+      })
+    }
+
+    // store已通过app.use(store)全局提供，此处删除重复provide
+    
+    // 初始化主题
+    store.dispatch('themeStore/initTheme')
+
+    const isExpired = (loginInfo) => {
+      if(!loginInfo || !loginInfo.expireTime){
+        return true;
+      }
+      return loginInfo.expireTime < new Date().getTime();
+    }
+
+    const initAudit = () => {
+      if (store.state.userStore.userInfo.type == 1) {
+        uni.setTabBarItem({
+          index: 2,
+          text: "群聊"
+        })
+      } else {
+        uni.setTabBarItem({
+          index: 2,
+          text: "搜索"
+        })
+      }
+    }
+
+    const exit = () => {
+      console.log("exit");
+      wsApi.close(1000);
+      uni.removeStorageSync("loginInfo");
+      uni.reLaunch({
+        url: "/pages/login/login"
+      })
+      store.dispatch("unload");
+    }
+
+    const initWebSocket = () => {
+      let loginInfo = uni.getStorageSync("loginInfo")
+      wsApi.init();
+      wsApi.connect(UNI_APP.WS_URL, loginInfo.accessToken);
+      wsApi.onConnect(() => {
+        pullPrivateOfflineMessage(store.state.chatStore.privateMsgMaxId);
+        pullGroupOfflineMessage(store.state.chatStore.groupMsgMaxId);
+      });
+      wsApi.onMessage((cmd, msgInfo) => {
+        if (cmd == 2) {
+          uni.showModal({
+            content: '您已在其他地方登陆，将被强制下线',
+            showCancel: false,
+          })
+          exit();
+        } else if (cmd == 3) {
+          handlePrivateMessage(msgInfo);
+        } else if (cmd == 4) {
+          handleGroupMessage(msgInfo);
+        }
+      });
+      wsApi.onClose((res) => {
+        if (res.code != 1000) {
+          uni.showToast({
+            title: '连接已断开，尝试重新连接...',
+            icon: 'none',
+          })
+          let loginInfo = uni.getStorageSync("loginInfo")
+          wsApi.reconnect(UNI_APP.WS_URL, loginInfo.accessToken);
+        }
+      })
+    }
+
+    const init = () => {
+      store.dispatch("load").then(() => {
+        initAudit()
+        initWebSocket()
+      }).catch((e) => {
+        console.log(e)
+        exit()
+      })
+    }
+
+    onMounted(async () => {
+      await nextTick()
+      isReady.value = true
+      
+      const loginInfo = uni.getStorageSync("loginInfo")
+      if (!isExpired(loginInfo)) {
+        console.log("初始化")
+        init()
+        uni.switchTab({
+          url: "/pages/chat/chat"
+        })
+      } else {
+        // #ifdef H5
+        uni.navigateTo({
+          url: "/pages/login/login"
+        })
+        // #endif
+      }
+    })
+    return {
+      isReady,
+      languageTransition,
+      store,
+      audioTip,
+      init,
+      isExpired,
+      handlePrivateMessage,
+      handleGroupMessage,
+      pullPrivateOfflineMessage,
+      pullGroupOfflineMessage,
+      playAudioTip
+    }
+  },
 		data() {
 			return {
 				audioTip: null
@@ -107,143 +369,7 @@ export default {
 					}
 				})
 			},
-			pullPrivateOfflineMessage(minId) {
-				store.commit("loadingPrivateMsg",true)
-				http({
-					url: "/message/private/pullOfflineMessage?minId=" + minId,
-					method: 'GET'
-				}).catch(()=>{
-					store.commit("loadingPrivateMsg",false)
-				})
-			},
-			pullGroupOfflineMessage(minId) {
-				store.commit("loadingGroupMsg",true)
-				http({
-					url: "/message/group/pullOfflineMessage?minId=" + minId,
-					method: 'GET'
-				}).catch(()=>{
-					store.commit("loadingGroupMsg",false)
-				})
-			},
-			handlePrivateMessage(msg) {
-				// 消息加载标志
-				if (msg.type == enums.MESSAGE_TYPE.LOADDING) {
-					store.commit("loadingPrivateMsg", JSON.parse(msg.content))
-					return;
-				}
-				// 消息已读处理，清空已读数量
-				if (msg.type == enums.MESSAGE_TYPE.READED) {
-					store.commit("resetUnreadCount", {
-						type: 'PRIVATE',
-						targetId: msg.recvId
-					})
-					return;
-				}
-				// 消息回执处理,改消息状态为已读
-				if (msg.type == enums.MESSAGE_TYPE.RECEIPT) {
-					store.commit("readedMessage", { friendId: msg.sendId })
-					return;
-				}
-				// 标记这条消息是不是自己发的
-				msg.selfSend = msg.sendId == store.state.userStore.userInfo.id;
-				// 好友id
-				let friendId = msg.selfSend ? msg.recvId : msg.sendId;
-				this.loadFriendInfo(friendId).then((friend) => {
-					this.insertPrivateMessage(friend, msg);
-				})
-
-			},
-			insertPrivateMessage(friend, msg) {
-				// webrtc 信令
-				if (msg.type >= enums.MESSAGE_TYPE.RTC_CALL_VOICE &&
-					msg.type <= enums.MESSAGE_TYPE.RTC_CANDIDATE) {
-					// #ifdef MP-WEIXIN
-						// 小程序不支持音视频
-						return;
-					// #endif
-					// 被呼叫，弹出视频页面
-					if(msg.type == enums.MESSAGE_TYPE.RTC_CALL_VOICE 
-						|| msg.type == enums.MESSAGE_TYPE.RTC_CALL_VIDEO){
-						let mode = 	msg.type == enums.MESSAGE_TYPE.RTC_CALL_VIDEO? "video":"voice";
-						let pages = getCurrentPages();
-						let curPage = pages[pages.length-1].route;
-						if(curPage != "pages/chat/chat-video"){
-							const friendInfo = encodeURIComponent(JSON.stringify(friend));
-							uni.navigateTo({
-								url: `/pages/chat/chat-video?mode=${mode}&friend=${friendInfo}&isHost=false`
-							})
-						}
-					}
-					setTimeout(() => {
-						uni.$emit('WS_RTC',msg);
-					},500)
-					return;
-				}
-
-				let chatInfo = {
-					type: 'PRIVATE',
-					targetId: friend.id,
-					showName: friend.nickName,
-					headImage: friend.headImage
-				};
-				// 打开会话
-				store.commit("openChat", chatInfo);
-				// 插入消息
-				store.commit("insertMessage", msg);
-				// 播放提示音
-				!msg.selfSend && this.playAudioTip();
-
-			},
-			handleGroupMessage(msg) {
-				// 消息加载标志
-				if (msg.type == enums.MESSAGE_TYPE.LOADDING) {
-					store.commit("loadingGroupMsg",JSON.parse(msg.content))
-					return;
-				}
-				// 消息已读处理
-				if (msg.type == enums.MESSAGE_TYPE.READED) {
-					// 我已读对方的消息，清空已读数量
-					let chatInfo = {
-						type: 'GROUP',
-						targetId: msg.groupId
-					}
-					store.commit("resetUnreadCount", chatInfo)
-					return;
-				}
-				// 消息回执处理
-				if (msg.type == enums.MESSAGE_TYPE.RECEIPT) {
-					// 更新消息已读人数
-					let msgInfo = {
-						id: msg.id,
-						groupId: msg.groupId,
-						readedCount: msg.readedCount,
-						receiptOk: msg.receiptOk
-					};
-					store.commit("updateMessage", msgInfo)
-					return;
-				}
-				// 标记这条消息是不是自己发的
-				msg.selfSend = msg.sendId == store.state.userStore.userInfo.id;
-				this.loadGroupInfo(msg.groupId).then((group) => {
-					// 插入群聊消息
-					this.insertGroupMessage(group, msg);
-				})
-
-			},
-			insertGroupMessage(group, msg) {
-				let chatInfo = {
-					type: 'GROUP',
-					targetId: group.id,
-					showName: group.remark,
-					headImage: group.headImageThumb
-				};
-				// 打开会话
-				store.commit("openChat", chatInfo);
-				// 插入消息
-				store.commit("insertMessage", msg);
-				// 播放提示音
-				!msg.selfSend && this.playAudioTip();
-			},
+// 删除原methods中的相关方法,已移至setup中
 			loadFriendInfo(id) {
 				return new Promise((resolve, reject) => {
 					let friend = store.getters.findFriend(id);
@@ -285,12 +411,9 @@ export default {
 				})
 				store.dispatch("unload");
 			},
-			playAudioTip() {
-				// 音频播放无法成功
-				// this.audioTip = uni.createInnerAudioContext();
-				// this.audioTip.src =  "/static/audio/tip.wav";
-				// this.audioTip.play();
-			},
+      // 已移至setup中实现
+      playAudioTip() {
+      },
 			isExpired(loginInfo){
 				if(!loginInfo || !loginInfo.expireTime){
 					return true;
@@ -313,55 +436,58 @@ export default {
 				}
 			}
 		},
-		onLaunch() {
-			// 登录状态校验
-			let loginInfo = uni.getStorageSync("loginInfo")
-			if (!this.isExpired(loginInfo)) {
-				console.log("初始化")
-				// 初始化
-				this.init();
-				// 跳转到聊天页面
-				uni.switchTab({
-					url: "/pages/chat/chat"
-				})
-			} else{
-				// 跳转到登录页
-				// #ifdef H5
-					uni.navigateTo({
-						url: "/pages/login/login"
-					})
-				// #endif
-			}
-		}
-	}
+    // 删除onLaunch,相关逻辑已移至setup
+  }
 </script>
 
 <style lang="scss">
-	@import url('./static/icon/iconfont.css');
+@import url('./static/icon/iconfont.css');
 
-	.container {
-		position: relative;
-		width: 100%;
-		height: 100vh;
-	}
+:root {
+  --theme-background: #ffffff;
+  --theme-text: #333333;
+  --theme-secondary-background: #f5f5f5;
+  --theme-transition: background-color 0.3s ease, color 0.3s ease;
+}
 
-	.tab-page {
-		// #ifdef H5
-		height: calc(100vh - 46px - 50px); // h5平台100vh是包含了顶部和底部，需要减去
-		// #endif
-		// #ifndef H5
-		height: calc(100vh);
-		// #endif
-		background-color: #f8f8f8;
-	}
+[data-theme='dark'] {
+  --theme-background: #1a1a1a;
+  --theme-text: #ffffff;
+  --theme-secondary-background: #2d2d2d;
+}
 
-	.page {
-		// #ifdef H5
-		height: calc(100vh - 45px); // h5平台100vh是包含了顶部，需要减去
-		// #endif
-		// #ifndef H5
-		height: calc(100vh);
-		// #endif
-		background-color: #f8f8f8;
-	}
+.theme-switching * {
+  transition: var(--theme-transition);
+}
+
+.container {
+  position: relative;
+  width: 100%; 
+  height: 100vh;
+  background-color: var(--theme-background);
+  color: var(--theme-text);
+  transition: var(--theme-transition);
+}
+
+.tab-page {
+  /* #ifdef H5 */
+  height: calc(100vh - 46px - 50px);
+  /* #endif */
+  /* #ifndef H5 */
+  height: calc(100vh);
+  /* #endif */
+  background-color: var(--theme-secondary-background);
+  transition: var(--theme-transition);
+}
+
+.page {
+  /* #ifdef H5 */
+  height: calc(100vh - 45px);
+  /* #endif */
+  /* #ifndef H5 */
+  height: calc(100vh);
+  /* #endif */
+  background-color: var(--theme-secondary-background);
+  transition: var(--theme-transition);
+}
 </style>

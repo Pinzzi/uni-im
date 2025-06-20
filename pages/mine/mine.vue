@@ -24,6 +24,9 @@
 			<view class="info-arrow">></view>
 		</view>
 		<view class="line"></view>
+		<view class="settings-group">
+			<theme-switcher class="theme-switcher"></theme-switcher>
+		</view>
 		<view class="btn-group">
 			<button class="btn" type="primary" @click="onModifyPassword()">修改密码</button>
 			<button class="btn" type="warn" @click="onQuit()">退出</button>
@@ -32,7 +35,12 @@
 </template>
 
 <script>
+	import ThemeSwitcher from '@/components/theme-switcher/theme-switcher.vue'
+	
 	export default {
+		components: {
+			ThemeSwitcher
+		},
 		data() {
 			return {}
 		},
@@ -63,8 +71,6 @@
 				return this.$store.state.userStore.userInfo;
 			}
 		}
-
-
 	}
 </script>
 
@@ -114,13 +120,20 @@
 			border-bottom: 1px solid #aaaaaa;
 		}
 
+		.settings-group {
+			padding: 0 40rpx;
+			
+			.theme-switcher {
+				margin: 20rpx 0;
+			}
+		}
+
 		.btn-group {
-			margin: 100rpx;
+			margin: 60rpx;
 
 			.btn {
 				margin-top: 20rpx;
 			}
-
 		}
 	}
 </style>

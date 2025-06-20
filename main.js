@@ -16,19 +16,29 @@ import * as recorder from './common/recorder-h5';
 import * as recorder from './common/recorder-app';
 // #endif
 
-
 export function createApp() {
   const app = createSSRApp(App)
+  
+  // Mount store first
+  app.use(store)
+  app.config.globalProperties.$store = store
+  
+  // Install i18n
   installI18n(app);
-  app.use(store);
+  
+  // Register global component
   app.component('LanguageSwitchTransition', LanguageSwitchTransition)
+  
+  // Register global properties
   app.config.globalProperties.$http = request;
   app.config.globalProperties.$wsApi = socketApi;
   app.config.globalProperties.$emo = emotion;
   app.config.globalProperties.$enums = enums;
   app.config.globalProperties.$date = date;
   app.config.globalProperties.$rc = recorder;
+
   return {
-    app
+    app,
+    store
   }
 }
