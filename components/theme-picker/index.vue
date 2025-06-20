@@ -23,21 +23,32 @@ export default {
   setup() {
     const store = useStore()
     const popup = ref(null)
+
     const themeIconSrc = computed(() => {
       return '/static/image/theme.png'
     })
 
-    const themes = [
-      { name: 'default', label: '默认主题', primaryColor: '#2979ff' },
-      { name: 'dark', label: '深色主题', primaryColor: '#1c1c1e' }
-    ]
+    const themes = computed(() => {
+      return [
+        {
+          name: 'default',
+          label: uni.$t('mo_ren_zhu_ti'), // 默认主题
+          primaryColor: '#2979ff'
+        },
+        {
+          name: 'dark',
+          label: uni.$t('an_hei_zhu_ti'), // 暗黑主题
+          primaryColor: '#1c1c1e'
+        }
+      ]
+    })
 
     const showPicker = () => {
       popup.value.open('bottom')
     }
 
     const changeTheme = (themeName) => {
-      store.dispatch('themeStore/changeTheme', themeName)
+      store.dispatch('themeStore/switchTheme', themeName)
       popup.value.close()
     }
 
@@ -60,6 +71,15 @@ export default {
     padding: 8px;
   }
 
+  .theme-icon:hover {
+    background: linear-gradient(135deg, #ebedf0, #d8dcdf);
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.06),
+                0 8px 8px rgba(0, 0, 0, 0.09),
+                0 12px 12px rgba(0, 0, 0, 0.12);
+    transform: translateY(-2px);
+    border-radius: 12px;
+  }
+
   .theme-list {
     padding: 16px;
     background-color: #fff;
@@ -69,6 +89,7 @@ export default {
       display: flex;
       align-items: center;
       padding: 12px 0;
+      gap: 8px;
       cursor: pointer;
 
       &:active {

@@ -176,8 +176,10 @@ export default {
 
 .current-language:hover {
   background: linear-gradient(135deg, #ebedf0, #d8dcdf);
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.12);
   transform: translateY(-2px);
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.06),
+              0 8px 8px rgba(0, 0, 0, 0.09),
+              0 12px 12px rgba(0, 0, 0, 0.12);
 }
 
 .switcher-icon {

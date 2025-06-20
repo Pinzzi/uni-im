@@ -1,10 +1,12 @@
 {
+  "an_hei_zhu_ti": "Tema sombrio",
   "deng_chu": "Log Out",
   "deng_lu": "Conecte-se",
   "deng_lu_ci_shu_yi_yong_jin": "O número de logins foi esgotado",
   "deng_lu_shi_bai": "falha no login",
   "huan_ying_deng_lu": "Bem -vindo ao login",
   "mi_ma": "senha",
+  "mo_ren_zhu_ti": "Tema padrão",
   "qing_shu_ru_mi_ma": "Por favor, insira sua senha",
   "qing_shu_ru_yong_hu_ming": "Por favor, insira seu nome de usuário",
   "sheng_yu_ji_hui": "Oportunidades de login restantes",

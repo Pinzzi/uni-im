@@ -250,6 +250,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+:deep(.uni-popup) {
+  z-index: 9999 !important;
+}
+
 .login-form {
 	margin: 50rpx;
 

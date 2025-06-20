@@ -1,10 +1,12 @@
 {
+  "an_hei_zhu_ti": "Thème sombre",
   "deng_chu": "Déconnecter",
   "deng_lu": "Se connecter",
   "deng_lu_ci_shu_yi_yong_jin": "Le nombre de connexions a été épuisé",
   "deng_lu_shi_bai": "La connexion a échoué",
   "huan_ying_deng_lu": "Bienvenue pour se connecter",
   "mi_ma": "mot de passe",
+  "mo_ren_zhu_ti": "Thème par défaut",
   "qing_shu_ru_mi_ma": "Veuillez saisir votre mot de passe",
   "qing_shu_ru_yong_hu_ming": "Veuillez saisir votre nom d'utilisateur",
   "sheng_yu_ji_hui": "Possibilités de connexion restantes",

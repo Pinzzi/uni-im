@@ -1,10 +1,12 @@
 {
+  "an_hei_zhu_ti": "暗いテーマ",
   "deng_chu": "ログアウト",
   "deng_lu": "ログイン",
   "deng_lu_ci_shu_yi_yong_jin": "ログインの数は使い果たされています",
   "deng_lu_shi_bai": "ログインに失敗しました",
   "huan_ying_deng_lu": "ログインへようこそ",
   "mi_ma": "パスワード",
+  "mo_ren_zhu_ti": "デフォルトのテーマ",
   "qing_shu_ru_mi_ma": "パスワードを入力してください",
   "qing_shu_ru_yong_hu_ming": "ユーザー名を入力してください",
   "sheng_yu_ji_hui": "残りのログインの機会",
