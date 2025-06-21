@@ -46,7 +46,7 @@ export default {
   .theme-option {
     padding: 8px 16px;
     border-radius: 4px;
-    background-color: var(--theme-secondary-background);
+    background-color: var(--theme-primary);
     color: var(--theme-text);
     cursor: pointer;
     transition: var(--theme-transition);

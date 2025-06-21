@@ -25,16 +25,16 @@ export default {
     'info-color': '#64748B',
     
     // 背景色
-    'bg': '#FFFFFF',
+    'bg': '#EFEFEF',
     'bg-color': '#FFFFFF',
     'bg-color-base': '#FFFFFF',
     'bg-color-secondary': '#F5F5F5',
     'bg-color-tertiary': '#FAFAFA',
     
     // 文字颜色
-    'text': '#efefef',
-    'text-color': '#efefef',
-    'text-color-primary': '#233333',
+    'text': '#233',
+    'text-color': '#233',
+    'text-color-primary': '#333',
     'text-color-secondary': '#666666',
     'text-color-disabled': '#999999',
     

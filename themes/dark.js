@@ -5,7 +5,7 @@ export default {
   // 主题变量
   variables: {
     // 主色
-    'primary': '#0A84FF',
+    'primary': '#00335d',
     'primary-color': '#0A84FF',
     'primary-color-hover': '#409EFF',
     'primary-color-pressed': '#0060CB',
@@ -31,7 +31,7 @@ export default {
     'bg-color-tertiary': '#2C2C2E',
 
     // 文字颜色
-    'text': '#ff0000',
+    'text': '#efefef',
     'text-color': '#FFFFFF',
     'text-color-primary': '#FFFFFF',
     'text-color-secondary': '#EBEBF599',

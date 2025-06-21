@@ -6,9 +6,13 @@
   "deng_lu_shi_bai": "error de inicio de sesion",
   "huan_ying_deng_lu": "Bienvenido a iniciar sesión",
   "mi_ma": "contraseña",
+  "mi_ma_chang_du_bu_neng_xiao_yu_16_wei": "La longitud de la contraseña no puede ser inferior a 16 dígitos",
+  "mi_ma_chang_du_bu_neng_xiao_yu_8_wei": "La longitud de la contraseña no puede ser inferior a 8 dígitos",
+  "mi_ma_ge_shi_bu_zheng_que": "Error de formato de contraseña: debe incluir letras de mayúsculas y minúsculas, números y caracteres especiales",
   "mo_ren_zhu_ti": "Tema predeterminado",
   "qing_shu_ru_mi_ma": "Ingrese su contraseña",
   "qing_shu_ru_yong_hu_ming": "Por favor ingrese su nombre de usuario",
   "sheng_yu_ji_hui": "Oportunidades de inicio de sesión restantes",
+  "wu_xiao_de_mi_yao": "Llave no válida",
   "yong_hu_ming": "nombre de usuario"
 }

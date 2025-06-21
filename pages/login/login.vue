@@ -10,19 +10,43 @@
 			<LanguageSwitcher />
 		</view>
 		<view class="login-title">{{ $t('huan_ying_deng_lu') }}</view>
-		<uni-forms style="margin-top: 100px;" :modelValue="loginForm" :rules="rules" validate-trigger="bind" ref="loginFormRef">
-			<uni-forms-item name="userName">
-				<uni-easyinput type="text" v-model="loginForm.userName" prefix-icon="person" :placeholder="$t('yong_hu_ming')" />
-			</uni-forms-item>
-			<uni-forms-item name="password">  
-				<uni-easyinput type="password" v-model="loginForm.password" prefix-icon="locked" :placeholder="$t('mi_ma')" />
-			</uni-forms-item>
-			<view class="login-tip" v-if="hasLoginButRejected">
-				<text>{{ $t('sheng_yu_ji_hui') }}: {{ remainingAttempts }}</text>
-			</view>
-			<button :disabled="isLocked" @click="submit" type="primary">{{ $t('deng_lu') }}</button>
-			<button class="reg_btn">注册</button>
-		</uni-forms>
+            <uni-forms 
+                style="margin-top: 100px;" 
+                :modelValue="loginForm" 
+                :rules="rules" 
+                validate-trigger="bind" 
+                ref="loginFormRef"
+            >
+                <uni-forms-item name="userName">
+                    <uni-easyinput 
+                        type="text" 
+                        v-model="loginForm.userName" 
+                        prefix-icon="person" 
+                        :placeholder="$t('yong_hu_ming')"
+                        autocomplete="username"
+                    />
+                </uni-forms-item>
+                <uni-forms-item name="password">
+                    <uni-easyinput 
+                        type="password" 
+                        v-model="loginForm.password" 
+                        prefix-icon="locked" 
+                        :placeholder="$t('mi_ma')"
+                        autocomplete="current-password"
+                    />
+                </uni-forms-item>
+                <view class="login-tip" v-if="hasLoginButRejected">
+                    <text>{{ $t('sheng_yu_ji_hui') }}: {{ remainingAttempts }}</text>
+                </view>
+                <button 
+                    class="submit-button" 
+                    :disabled="isLocked" 
+                    @tap="handleSubmit"
+                    type="primary"
+                >
+                    {{ $t('deng_lu') }}
+                </button>
+            </uni-forms>
 		<uni-popup ref="deviceVerifyPopup" type="dialog">
 			<uni-popup-dialog 
 				:title="$t('she_bei_yan_zheng')"
@@ -37,13 +61,13 @@
 </template>
 
 <script>
-import { useStore } from 'vuex'
-import { computed } from 'vue' 
-import LanguageSwitcher from '@/components/language-switcher/index.vue'
-import languageSwitchTransition from '@/components/language-switch-transition/index.vue'
-import ThemePicker from '@/components/theme-picker/index.vue'
-import { encryptData } from '../../common/crypto.js';
-import { deviceFingerprint } from '../../utils/device'
+import { useStore } from 'vuex';
+import { computed } from 'vue';
+import LanguageSwitcher from '@/components/language-switcher/index.vue';
+import languageSwitchTransition from '@/components/language-switch-transition/index.vue';
+import ThemePicker from '@/components/theme-picker/index.vue';
+import { encryptData } from '@/common/crypto.js';
+import { deviceFingerprint } from '@/utils/device.js';
 
 export default {
 	components: {
@@ -69,26 +93,13 @@ export default {
 				password: '',
 				deviceId: ''
 			},
-			rules: {
-				userName: {
-					rules: [{
-						required: true,
-						errorMessage: uni.$t('qing_shu_ru_yong_hu_ming'),
-					}]
-				},
-				password: {
-					rules: [{
-						required: true,
-						errorMessage: uni.$t('qing_shu_ru_mi_ma'),
-						minLength: 8
-					}]
-				}
-			},
+			rules: {},
+			loading: false,
 			deviceFingerprint: '',
 			deviceAttempts: {},
 			loginAttempts: 0,
 			maxAttempts: 5,
-			lockoutDuration: 30 * 60 * 1000, // 30分钟
+			lockoutDuration: 30 * 60 * 1000,
 			lockoutTime: 0,
 			verificationCode: '',
 			hasLoginButRejected: false,
@@ -102,7 +113,11 @@ export default {
 				return this.maxAttempts
 			}
 			const currentDeviceAttempts = this.deviceAttempts[this.deviceFingerprint] || 0
-			return this.maxAttempts - currentDeviceAttempts
+			let res = this.maxAttempts - currentDeviceAttempts
+			if (res < 0) {
+				res = 0
+			}
+			return res
 		},
 		isLocked() {
 			if (!this.loginForm.userName || !this.loginForm.password) {
@@ -112,12 +127,66 @@ export default {
 			return deviceLockout > Date.now()
 		},
 	},
-
 	methods: {
+		createRules() {
+			return {
+				userName: {
+					rules: [{
+						required: true,
+						errorMessage: uni.$t('qing_shu_ru_yong_hu_ming')
+					}]
+				},
+				password: {
+					rules: [{
+						required: true,
+						errorMessage: uni.$t('qing_shu_ru_mi_ma')
+					}, {
+						minLength: 16,
+						errorMessage: uni.$t('mi_ma_chang_du_bu_neng_xiao_yu_16')
+					}, {
+						// pattern: /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[+/=_\-@#$%^&*!])[A-Za-z\d+/=_\-@#$%^&*!]{8,}$/, // 需包含大小写字母、数字或特殊字符
+						pattern: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{16,}$/, // 16位数字或字母
+						errorMessage: uni.$t('mi_ma_ge_shi_cuo_wu')
+					}]
+				}
+			};
+		},
+
+        async updateFormRules() {
+            // 更新验证规则
+            this.rules = this.createRules();
+
+            if (!this.$refs.loginFormRef) {
+                return;
+            }
+
+            try {
+                // 清除现有验证结果
+                await this.$refs.loginFormRef.clearValidate();
+
+                // 等待 DOM 更新
+                await this.$nextTick();
+
+                // 始终验证两个字段，确保错误消息能够更新
+                await this.$refs.loginFormRef.validate(['userName', 'password']);
+            } catch (err) {
+                console.log('@login.updateFormRules=>\n【表单验证更新时出错】:\n', err);
+            }
+        },
+
+		async validate() {
+			try {
+				const valid = await this.$refs.loginFormRef.validate()
+				return valid
+			} catch (error) {
+				console.log('@login.updateFormRules=>\n【表单验证错误】:\n', error)
+				return false
+			}
+		},
 		async generateFingerprint() {
 			const fingerprint = await deviceFingerprint()
 			if (!fingerprint) {
-				console.error('获取设备指纹失败')
+				console.log('获取设备指纹失败')
 				// 生成一个临时的随机指纹
 				this.deviceFingerprint = Math.random().toString(36).substring(2)
 			} else {
@@ -146,45 +215,60 @@ export default {
 			}
 		},
 
-		async submit() {
-			if(this.isLocked) {
-				uni.showToast({
-					title: '登陆已锁定',
-					icon: 'none'
-				});
+	async handleSubmit() {
+		console.log('@onClick【登录】开始校验');
+		try {
+			const valid = await this.validate();
+			if (valid) {
+				await this.submit();
+			}
+		} catch (error) {
+			console.log('提交出错：', error);
+		}
+	},
+
+	async submit() {
+		if (this.isLocked) {
+			uni.showToast({
+				title: this.$t('login_locked'),
+				icon: 'none'
+			});
+			return;
+		}
+
+		try {
+			this.loading = true;
+			const deviceId = await deviceFingerprint();
+			const { userName, password } = this.loginForm;
+
+			// 表单验证通过后再进行加密处理
+			const encryptedPassword = await encryptData(password);
+
+			const loginInfo = await this.$http({
+				url: '/login',
+				method: 'POST',
+				data: {
+					userName,
+					password: encryptedPassword,
+					deviceId
+				}
+			});
+
+			// 检查是否需要设备验证
+			if (loginInfo.needDeviceVerification) {
+				this.isNewDevice = true;
+				this.$refs.deviceVerifyPopup.open();
 				return;
 			}
 
-			try {
-				const valid = await this.$refs.loginFormRef.validate();
-				if(!valid) return;
-
-				const encryptedPassword = encryptData(this.loginForm.password);
-				const deviceId = await deviceFingerprint();
-
-				const loginData = {
-					...this.loginForm,
-					password: encryptedPassword,
-					deviceId
-				};
-
-				const loginInfo = await this.$http({
-					url: '/login',
-					data: loginData,
-					method: 'POST'
-				});
-
-				if(loginInfo.needDeviceVerification) {
-					this.isNewDevice = true;
-					this.$refs.deviceVerifyPopup.open();
-					return;
-				}
-
-				this.handleLoginSuccess(loginInfo);
-			} catch(error) {
-				this.handleLoginError(error);
-			}
-		},
+			// 处理登录成功
+			await this.handleLoginSuccess(loginInfo);
+		} catch (error) {
+			this.handleLoginError(error);
+		} finally {
+			this.loading = false;
+		}
+	},
 
 		async verifyDevice() {
 			try {
@@ -221,23 +305,52 @@ export default {
 			})
 		},
 
-		handleLoginError(error) {
-			this.hasLoginButRejected = true
-			this.recordLoginAttempt()
-			if(this.deviceAttempts[this.deviceFingerprint] >= this.maxAttempts) {
-				uni.showToast({
-					title: this.$t('deng_lu_ci_shu_yi_yong_jin'),
-					icon: 'none'
-				})
-			} else {
-				uni.showToast({
-					title: error.message || this.$t('deng_lu_shi_bai'),
-					icon: 'none'
-				})
-			}
+	handleLoginError(error) {
+		console.log("@handleLoginError()=>【处理特定错误消息的翻译】\n", error.message);
+		this.hasLoginButRejected = true;
+		this.recordLoginAttempt();
+
+		if (this.deviceAttempts[this.deviceFingerprint] >= this.maxAttempts) {
+			uni.showToast({
+				title: this.$t('deng_lu_ci_shu_yi_yong_jin'),
+				icon: 'none'
+			});
+			return;
+		}
+
+		// 处理特定错误消息的翻译
+		let errorMessage = '';
+		if (error.message && error.message.includes('Invalid API secret')) {
+			errorMessage = this.$t('wu_xiao_de_mi_yao');
+		} else if (error.message && error.message.includes('must be at least 8 characters')) {
+			errorMessage = this.$t('mi_ma_chang_du_bu_neng_xiao_yu_8_wei');
+		} else if (error.message && error.message.includes('password format')) {
+			errorMessage = this.$t('mi_ma_ge_shi_cuo_wu');
+		} else {
+			errorMessage = error.message || this.$t('deng_lu_shi_bai');
+		}
+
+		uni.showToast({
+			title: errorMessage,
+			icon: 'none',
+			duration: 2000
+		});
+	}
+	},
+
+	watch: {
+		'$i18n.locale': {
+			handler() {
+				this.updateFormRules()
+			},
+			immediate: true
 		}
 	},
 	
+	created() {
+		this.rules = this.createRules()
+	},
+
 	async onLoad() {
 		const lastLoginTime = uni.getStorageSync('lastLoginTime')
 		if(lastLoginTime && Date.now() - lastLoginTime < 24 * 60 * 60 * 1000) {
@@ -292,23 +405,28 @@ export default {
     text-align: center;
   }
 
-  button {
+  .submit-button {
     width: 100%;
-    margin-bottom: 20rpx;
+    height: 88rpx;
+    line-height: 88rpx;
+    border-radius: 10rpx;
     background-color: var(--primary-color, #007AFF);
     color: #FFFFFF;
+    font-size: 32rpx;
+    margin-top: 40rpx;
+    border: none;
 
-    &[disabled] {
+    &:disabled {
       opacity: 0.6;
       cursor: not-allowed;
     }
+  }
 
-    &.reg_btn {
-      padding: 6px 10px;
-      font-size: 17px;
-      background-color: var(--theme-secondary-color);
-      color: var(--theme-text);
-    }
+  .reg_btn {
+    padding: 6px 10px;
+    font-size: 17px;
+    background-color: var(--theme-secondary-color);
+    color: var(--theme-text);
   }
 }
 </style>

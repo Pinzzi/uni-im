@@ -34,12 +34,12 @@ export default {
         {
           name: 'default',
           label: uni.$t('mo_ren_zhu_ti'),
-          primaryColor: themeStore.default.variables['primary-color']
+          primaryColor: themeStore.default.variables['primary']
         },
         {
           name: 'dark',
           label: uni.$t('an_hei_zhu_ti'),
-          primaryColor: '#233333'
+          primaryColor: themeStore.dark.variables['primary']
         }
       ]
     })
@@ -100,7 +100,8 @@ export default {
       .theme-color {
         width: 24px;
         height: 24px;
-        border-radius: 12px;
+        border-radius: 24px;
+        border: 2px solid var(--theme-text);
       }
 
       .theme-name {
