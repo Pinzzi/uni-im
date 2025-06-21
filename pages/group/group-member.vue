@@ -1,7 +1,7 @@
 <template>
 	<view v-if="$store.state.userStore.userInfo.type == 1" class="page group-member">
 		<view class="search-bar">
-			<uni-search-bar v-model="searchText" cancelButton="none" placeholder="输入成员昵称搜索"></uni-search-bar>
+			<uni-search-bar v-model="searchText" cancelButton="none" :placeholder="$t('shu_ru_cheng_yuan_ni_cheng_sou')"></uni-search-bar>
 		</view>
 		<view class="member-items">
 			<scroll-view class="scroll-bar" scroll-with-animation="true" scroll-y="true">
@@ -16,7 +16,7 @@
 						
 						<view class="member-kick">
 							<button type="warn" v-show="isOwner && !isSelf(member.userId)" size="mini"
-								@click.stop="onKickOut(member,idx)">移出群聊</button>
+								@click.stop="onKickOut(member,idx)">{{ $t('yi_chu_qun_liao') }}</button>
 						</view>
 					</view>
 				</view>
@@ -42,9 +42,11 @@
 				})
 			},
 			onKickOut(member, idx) {
+				let before_opt_tips_txt = uni.$t('que_ding_jiang_gai_cheng_yuan')
+				let action_done_tips_txt = uni.$t('gai_cheng_yuan_yi_bei_yi_chu_g')
 				uni.showModal({
-					title: '确认移出?',
-					content: `确定将成员'${member.aliasName}'移出群聊吗？`,
+					title: uni.$t('que_ren_yi_chu'),
+					content: `${before_opt_tips_txt}\n${member.aliasName}`,
 					success: (res) => {
 						if (res.cancel)
 							return;
@@ -53,7 +55,7 @@
 							method: 'DELETE'
 						}).then(() => {
 							uni.showToast({
-								title: `已将${member.aliasName}移出群聊`,
+								title: `${member.aliasName}\n${action_done_tips_txt}`,
 								icon: 'none'
 							})
 							this.groupMembers.splice(idx, 1);

@@ -2,7 +2,7 @@
 	<view class="page friend-add">
 		<view class="search-bar">
 			<uni-search-bar v-model="searchText" :focus="true" @confirm="onSearch()" @cancel="onCancel()"
-				placeholder="用户名/昵称"></uni-search-bar>
+				:placeholder="$t('yong_hu_ming_huo_ni_cheng')"></uni-search-bar>
 		</view>
 		<view class="user-items">
 			<scroll-view class="scroll-bar" scroll-with-animation="true" scroll-y="true">
@@ -14,8 +14,8 @@
 						<view class="user-name">{{ user.nickName}}</view>
 						<view class="user-btns">
 							<button type="primary" v-show="!isFriend(user.id)" size="mini"
-								@click.stop="onAddFriend(user)">加为好友</button>
-							<button type="default" v-show="isFriend(user.id)" size="mini" disabled>已添加</button>
+								@click.stop="onAddFriend(user)">{{ $t('jia_wei_hao_you') }}</button>
+							<button type="default" v-show="isFriend(user.id)" size="mini" disabled>{{ $t('yi_tian_jia') }}</button>
 						</view>
 					</view>
 				</view>
@@ -57,7 +57,7 @@
 					}
 					this.$store.commit("addFriend", friend);
 					uni.showToast({
-						title: "添加成功，对方已成为您的好友",
+						title: uni.$t('tian_jia_cheng_gong_dui_fang_y'),
 						icon: "none"
 					})
 				})

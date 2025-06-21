@@ -1,7 +1,7 @@
 <template>
 	<view v-if="$store.state.userStore.userInfo.type == 1" class="page group-invite">
 		<view class="search-bar">
-			<uni-search-bar v-model="searchText" cancelButton="none" placeholder="输入好友昵称搜索"></uni-search-bar>
+			<uni-search-bar v-model="searchText" cancelButton="none" :placeholder="$t('shu_ru_hao_you_ni_cheng_sou_su')"></uni-search-bar>
 		</view>
 		<view class="friend-items">
 			<scroll-view class="scroll-bar" scroll-with-animation="true" scroll-y="true">
@@ -22,7 +22,7 @@
 			</scroll-view>
 		</view>
 		<view>
-			<button type="primary" :disabled="inviteSize==0" @click="onInviteFriends()">邀请({{inviteSize}}) </button>
+			<button type="primary" :disabled="inviteSize==0" @click="onInviteFriends()">{{ $t('yao_qing') }} ({{inviteSize}}) </button>
 		</view>
 	</view>
 </template>
@@ -55,7 +55,7 @@
 						data: inviteVo
 					}).then(() => {
 						uni.showToast({
-							title: "邀请成功",
+							title: uni.$t('yao_qing_cheng_gong'),
 							icon: 'none'
 						})
 						setTimeout(() => {

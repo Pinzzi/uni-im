@@ -15,22 +15,18 @@
 						color="darkred"></uni-icons>
 				</view>
 				<text>
-					<span>昵称</span>
-					<span> ：</span>
-					<span>{{userInfo.nickName}}</span>
+					{{ $t('ni_cheng') }} ：{{userInfo.nickName}}
 				</text>
 				<text>
-					<span>签名</span>
-					<span> ：</span>
-					<span>{{userInfo.signature}}</span>
+					{{ $t('qian_ming') }} ：{{userInfo.signature}}
 				</text>
 			</view>
 		</view>
 		<view class="line"></view>
 		<view class="btn-group">
-			<button class="btn" v-show="isFriend" type="primary" @click="onSendMessage()">发消息</button>
-			<button class="btn" v-show="!isFriend" type="primary" @click="onAddFriend()">加为好友</button>
-			<button class="btn" v-show="isFriend" type="warn" @click="onDelFriend()">删除好友</button>
+			<button class="btn" v-show="isFriend" type="primary" @click="onSendMessage()">{{ $t('fa_xiao_xi') }}</button>
+			<button class="btn" v-show="!isFriend" type="primary" @click="onAddFriend()">{{ $t('jia_wei_hao_you') }}</button>
+			<button class="btn" v-show="isFriend" type="warn" @click="onDelFriend()">{{ $t('shan_chu_hao_you') }}</button>
 		</view>
 	</view>
 </template>
@@ -77,15 +73,17 @@
 					}
 					this.$store.commit("addFriend", friend);
 					uni.showToast({
-						title: '对方已成为您的好友',
+						title: uni.$t('dui_fang_yi_cheng_wei_nin_de_h'),
 						icon: 'none'
 					})
 				})
 			},
 			onDelFriend(){
+				const beforeDelConfirmTipTxt = uni.$t('que_ding_yi_chu_gai_hao_you_ma') 
+				const hadDelTipTxt = uni.$t('gai_hao_you_yi_yi_chu')
 				uni.showModal({
-					title: "确认删除",
-					content: `确认要删除与 '${this.userInfo.nickName}'的好友关系吗?`,
+					title: uni.$t('que_ren_shan_chu'),
+					content: `${beforeDelConfirmTipTxt}\n${this.userInfo.nickName}`,
 					success: (res)=> {
 						if(res.cancel)
 							return;
@@ -96,7 +94,7 @@
 							this.$store.commit("removeFriend", this.userInfo.id);
 							this.$store.commit("removePrivateChat", this.userInfo.id);
 							uni.showToast({
-								title: 	`与 '${this.userInfo.nickName}'的好友关系已解除`,
+								title: 	`${hadDelTipTxt}\n${this.userInfo.nickName}`,
 								icon: 'none'
 							})
 						})

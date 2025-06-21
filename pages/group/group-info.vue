@@ -15,39 +15,39 @@
 					<uni-icons type="plusempty" size="28" color="#888888"></uni-icons>
 				</view>
 			</view>
-			<view class="member-more" @click="onShowMoreMmeber()">查看更多群成员 ></view>
+			<view class="member-more" @click="onShowMoreMmeber()">{{ $t('cha_kan_geng_duo_qun_cheng_yua') }} ></view>
 		</view>
 		<view class="group-detail">
-			<uni-section title="群聊名称:" titleFontSize="14px">
+			<uni-section :title="$t('qun_liao_ming_cheng')" titleFontSize="14px">
 				<template v-slot:right>
 					<text class="detail-text">{{group.name}}</text>
 				</template>
 			</uni-section>
-			<uni-section title="群主:" titleFontSize="14px">
+			<uni-section :title="$t('qun_zhu')" titleFontSize="14px">
 				<template v-slot:right>
 					<text class="detail-text">{{ownerName}}</text>
 				</template>
 			</uni-section>
 
-			<uni-section title="群聊备注:" titleFontSize="14px">
+			<uni-section :title="$t('qun_liao_bei_zhu')" titleFontSize="14px">
 				<template v-slot:right>
 					<text class="detail-text"> {{group.remark}}</text>
 				</template>
 			</uni-section>
-			<uni-section title="我在本群的昵称:" titleFontSize="14px">
+			<uni-section :title="$t('wo_zai_ben_qun_de_ni_cheng')" titleFontSize="14px">
 				<template v-slot:right>
 					<text class="detail-text"> {{group.aliasName}}</text>
 				</template>
 			</uni-section>
-			<uni-section title="群公告:" titleFontSize="14px">
+			<uni-section :title="$t('qun_gong_gao')" titleFontSize="14px">
 				<uni-notice-bar :text="group.notice" />
 			</uni-section>
-			<view v-if="!group.quit"  class="group-edit" @click="onEditGroup()">修改群聊资料 > </view>
+			<view v-if="!group.quit"  class="group-edit" @click="onEditGroup()">{{ $t('xiu_gai_qun_liao_zi_liao') }} ></view>
 		</view>
 		<view v-if="!group.quit"  class="btn-group">
-			<button class="btn" type="primary" @click="onSendMessage()">发消息</button>
-			<button class="btn" v-show="!isOwner" type="warn" @click="onQuitGroup()">退出群聊</button>
-			<button class="btn" v-show="isOwner" type="warn" @click="onDissolveGroup()">解散群聊</button>
+			<button class="btn" type="primary" @click="onSendMessage()">{{ $t('fa_xiao_xi') }}</button>
+			<button class="btn" v-show="!isOwner" type="warn" @click="onQuitGroup()">{{ $t('tui_chu_qun_liao') }}</button>
+			<button class="btn" v-show="isOwner" type="warn" @click="onDissolveGroup()">{{ $t('jie_san_qun_liao') }}</button>
 		</view>
 	</view>
 </template>
@@ -92,9 +92,10 @@
 				})
 			},
 			onQuitGroup() {
+				let tip_txt = uni.$t('nin_yi_tui_chu_qun_liao')
 				uni.showModal({
-					title: '确认退出?',
-					content: `退出群聊后将不再接受群里的消息，确认退出吗?`,
+					title: uni.$t('que_ren_tui_chu'),
+					content: uni.$t('que_ren_tui_chu_ma'),
 					success: (res) => {
 						if (res.cancel)
 							return;
@@ -103,8 +104,8 @@
 							method: 'DELETE'
 						}).then(() => {
 							uni.showModal({
-								title: `退出成功`,
-								content: `您已退出群聊'${this.group.name}'`,
+								title: uni.$t('tui_chu_cheng_gong'),
+								content: `${tip_txt}\n${this.group.name}`,
 								showCancel: false,
 								success: () => {
 									setTimeout(()=>{
@@ -121,9 +122,11 @@
 			},
 			onDissolveGroup() {
 				console.log(this.group.name)
+				let comfirm_de_group_tip_txt = uni.$t('que_ren_yao_jie_san_gai_qun_li')
+				let success_del_group_tip_txt = uni.$t('cheng_gong_jie_san_gai_qun_lia')
 				uni.showModal({
-					title: '确认解散?',
-					content: `确认要解散群聊'${this.group.name}'吗?`,
+					title: uni.$t('que_ren_jie_san'),
+					content: `${comfirm_de_group_tip_txt}\n${this.group.name}`,
 					success: (res) => {
 						if (res.cancel)
 							return;
@@ -132,8 +135,8 @@
 							method: 'delete'
 						}).then(() => {
 							uni.showModal({
-								title: `解散成功`,
-								content: `群聊'${this.group.name}'已解散`,
+								title: uni.$t('jie_san_cheng_gong'),
+								content: `${success_del_group_tip_txt}\n${this.group.name}`,
 								showCancel: false,
 								success: () => {	
 									setTimeout(()=>{

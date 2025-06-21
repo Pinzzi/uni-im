@@ -34,7 +34,7 @@
 			<chat-record v-if="showRecord" class="chat-record" @send="onSendRecord" ></chat-record>
 			<view v-else class="send-text">
 				<textarea class="send-text-area" v-model="sendText" auto-height :show-confirm-bar="false"
-					:placeholder="isReceipt?'[回执消息]':''" :adjust-position="false" @confirm="sendTextMessage()"
+					:placeholder="isReceipt? $t('huizhi_xiaoxi') : ''" :adjust-position="false" @confirm="sendTextMessage()"
 					@keyboardheightchange="onKeyboardheightchange" @input="onTextInput" confirm-type="send" confirm-hold
 					:hold-keyboard="true"></textarea>
 			</view>
@@ -43,7 +43,7 @@
 			<view v-if="sendText==''" class="iconfont icon-add" @click="onShowToolsChatTab()">
 			</view>
 			<button v-if="sendText!=''||atUserIds.length>0" class="btn-send" type="primary"
-				@touchend.prevent="sendTextMessage()" size="mini">发送</button>
+				@touchend.prevent="sendTextMessage()" size="mini">{{ $t('fa_song') }}</button>
 		</view>
 
 		<view class="chat-tab-bar" v-show="chatTabBox!='none' ||showKeyBoard " :style="{height:`${keyboardHeight}px`}">
@@ -53,14 +53,14 @@
 						:onSuccess="onUploadImageSuccess" :onError="onUploadImageFail">
 						<view class="tool-icon iconfont icon-picture"></view>
 					</image-upload>
-					<view class="tool-name">相册</view>
+					<view class="tool-name">{{ $t('xiang_ce') }}</view>
 				</view>
 				<view class="chat-tools-item">
 					<image-upload sourceType="camera" :onBefore="onUploadImageBefore" :onSuccess="onUploadImageSuccess"
 						:onError="onUploadImageFail">
 						<view class="tool-icon iconfont icon-camera"></view>
 					</image-upload>
-					<view class="tool-name">拍摄</view>
+					<view class="tool-name">{{ $t('pai_she') }}</view>
 				</view>
 				<!-- #ifndef APP-PLUS -->
 				<!-- APP 暂时不支持选择文件 -->
@@ -69,26 +69,26 @@
 						:onError="onUploadFileFail">
 						<view class="tool-icon iconfont icon-folder"></view>
 					</file-upload>
-					<view class="tool-name">文件</view>
+					<view class="tool-name">{{ $t('wen_jian') }}</view>
 				</view>
 				<!-- #endif -->
 				<view class="chat-tools-item" @click="onRecorderInput()">
 					<view class="tool-icon iconfont icon-microphone"></view>
-					<view class="tool-name">语音消息</view>
+					<view class="tool-name">{{ $t('yu_yin_xiao_xi') }}</view>
 				</view>
 				<view v-if="chat.type == 'GROUP'" class="chat-tools-item" @click="switchReceipt()">
 					<view class="tool-icon iconfont icon-receipt" :class="isReceipt?'active':''"></view>
-					<view class="tool-name">回执消息</view>
+					<view class="tool-name">{{ $t('hui_zhi_xiao_xi') }}</view>
 				</view>
 				<!-- #ifndef MP-WEIXIN -->
 				<!-- 音视频不支持小程序 -->
 				<view v-if="chat.type == 'PRIVATE'" class="chat-tools-item" @click="onVideoCall()">
 					<view class="tool-icon iconfont icon-video"></view>
-					<view class="tool-name">视频通话</view>
+					<view class="tool-name">{{ $t('shi_pin_tong_hua') }}</view>
 				</view>
 				<view v-if="chat.type == 'PRIVATE'" class="chat-tools-item" @click="onVoiceCall()">
 					<view class="tool-icon iconfont icon-call"></view>
-					<view class="tool-name">语音通话</view>
+					<view class="tool-name">{{ $t('yu_yin_tong_hua') }}</view>
 				</view>
 				<!-- #endif -->
 			</view>
@@ -221,11 +221,11 @@
 			sendTextMessage() {
 				if (!this.sendText.trim() && this.atUserIds.length == 0) {
 					return uni.showToast({
-						title: "不能发送空白信息",
+						title: uni.$t('bu_neng_fa_song_kong_bai_xin_x'),
 						icon: "none"
 					});
 				}
-				let receiptText = this.isReceipt ? "【回执消息】" : "";
+				let receiptText = this.isReceipt ? uni.$t('huizhi_xiaoxi') : "";
 				let atText = this.createAtText();
 				let msgInfo = {
 					content: receiptText + this.sendText + atText,
@@ -439,13 +439,13 @@
 			},
 			onDeleteMessage(msgInfo) {
 				uni.showModal({
-					title: '删除消息',
-					content: '确认删除消息?',
+					title: uni.$t('shan_chu_xiao_xi'),
+					content: uni.$t('que_ren_shan_chu_xiao_xi'),
 					success: (res) => {
 						if (!res.cancel) {
 							this.$store.commit("deleteMessage", msgInfo);
 							uni.showToast({
-								title: "删除成功",
+								title: uni.$t('shan_chu_cheng_gong'),
 								icon: "none"
 							})
 						}
@@ -454,8 +454,8 @@
 			},
 			onRecallMessage(msgInfo) {
 				uni.showModal({
-					title: '撤回消息',
-					content: '确认撤回消息?',
+					title: uni.$t('che_hui_xiao_xi'),
+					content: uni.$t('que_ren_che_hui_xiao_xi'),
 					success: (res) => {
 						if (!res.cancel) {
 							let url = `/message/${this.chat.type.toLowerCase()}/recall/${msgInfo.id}`
@@ -465,7 +465,7 @@
 							}).then(() => {
 								msgInfo = JSON.parse(JSON.stringify(msgInfo));
 								msgInfo.type = this.$enums.MESSAGE_TYPE.RECALL;
-								msgInfo.content = '你撤回了一条消息';
+								msgInfo.content = uni.$t('ni_che_hui_le_yi_tiao_xiao_xi');
 								msgInfo.status = this.$enums.MESSAGE_STATUS.RECALL;
 								this.$store.commit("insertMessage", msgInfo);
 							})
@@ -489,7 +489,7 @@
 					fail(e) {
 						console.log(e);
 						uni.showToast({
-							title: "文件下载失败",
+							title: uni.$t('wen_jian_xia_zai_shi_bai'),
 							icon: "none"
 						})
 					}
@@ -626,7 +626,7 @@
 					if (id == -1) {
 						atUsers.push({
 							id: -1,
-							aliasName: "全体成员"
+							aliasName: uni.$t('quan_ti_cheng_yuan')
 						})
 						return;
 					}

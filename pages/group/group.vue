@@ -2,14 +2,14 @@
 	<view v-if="$store.state.userStore.userInfo.type == 1" class="tab-page group">
 		<view class="nav-bar">
 			<view class="nav-search">
-				<uni-search-bar @focus="onFocusSearch" cancelButton="none" placeholder="点击搜索群聊"></uni-search-bar>
+				<uni-search-bar @focus="onFocusSearch" cancelButton="none" :placeholder="$t('dian_ji_sou_suo_qun_liao')"></uni-search-bar>
 			</view>
 			<view class="nav-add" @click="onCreateNewGroup()">
 				<uni-icons type="personadd" size="30"></uni-icons>
 			</view>
 		</view>
 		<view class="group-tip" v-if="$store.state.groupStore.groups.length==0">
-			温馨提示：您现在还没有加入任何群聊，点击右上方'+'按钮可以创建群聊哦~
+			{{ $t('wen_xin_ti_shi_nin_xian_zai_hu-0') }}
 		</view>
 		<view class="group-items" v-else>
 			<scroll-view class="scroll-bar" scroll-with-animation="true" scroll-y="true">

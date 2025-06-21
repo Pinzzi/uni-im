@@ -3,6 +3,7 @@ import {
 	MESSAGE_STATUS
 } from '@/common/enums.js';
 import userStore from './userStore';
+import i18n from '@/i18n/index.js';
 /*
 	uniapp性能优化：
 	1.由于uniapp渲染消息性能非常拉胯,所以先把离线消息存储到cacheChats,等
@@ -15,6 +16,7 @@ import userStore from './userStore';
 */
 
 let cacheChats = [];
+
 export default {
 	state: {
 		chats: [],
@@ -187,17 +189,17 @@ export default {
 			}
 			// 会话列表内容
 			if (msgInfo.type == MESSAGE_TYPE.IMAGE) {
-				chat.lastContent = "[图片]";
+				chat.lastContent = i18n.t('tu_pian');
 			} else if (msgInfo.type == MESSAGE_TYPE.FILE) {
-				chat.lastContent = "[文件]";
+				chat.lastContent = i18n.t('wen_jian_yinhao');
 			} else if (msgInfo.type == MESSAGE_TYPE.AUDIO) {
-				chat.lastContent = "[语音]";
+				chat.lastContent = i18n.t('yu_yin');
 			} else if (msgInfo.type == MESSAGE_TYPE.TEXT || msgInfo.type == MESSAGE_TYPE.RECALL) {
 				chat.lastContent = msgInfo.content;
 			} else if (msgInfo.type == MESSAGE_TYPE.RT_VOICE) {
-				chat.lastContent = "[语音通话]";
+				chat.lastContent = i18n.t('yuyin_tonghua');
 			} else if (msgInfo.type == MESSAGE_TYPE.RT_VIDEO) {
-				chat.lastContent = "[视频通话]";
+				chat.lastContent = i18n.t('shipin_tonghua');
 			}
 			chat.lastSendTime = msgInfo.sendTime;
 			chat.sendNickName = msgInfo.sendNickName;

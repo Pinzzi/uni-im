@@ -3,11 +3,11 @@
 
 		<view v-if="loading" class="chat-loading">
 			<loading :size="50" :mask="false">
-				<view>消息接收中...</view>
+				<view>{{ $t('xiao_xi_jie_shou_zhong') }}</view>
 			</loading>
 		</view>
 		<view class="chat-tip" v-if="!loading && chatStore.chats.length==0">
-			温馨提示：您现在还没有任何聊天消息，快跟您的好友发起聊天吧~
+			{{ $t('wen_xin_ti_shi_nin_xian_zai_hu') }}
 		</view>
 		<scroll-view class="scroll-bar" v-else scroll-with-animation="true" scroll-y="true">
 			<view v-for="(chatPos,i) in chatsPos" :key="i">
@@ -32,12 +32,12 @@
 					chatIdx: -1,
 					items: [{
 							key: 'DELETE',
-							name: '删除该聊天',
+							name: uni.$t('shan_chu_gai_liao_tian'),
 							icon: 'trash'
 						},
 						{
 							key: 'TOP',
-							name: '置顶该聊天',
+							name: uni.$t('zhi_ding_gai_liao_tian'),
 							icon: 'arrow-up'
 						}
 					]

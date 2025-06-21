@@ -2,27 +2,27 @@
 	<view v-if="$store.state.userStore.userInfo.type == 1" class="page group-edit">
 		<uni-forms ref="form" :modelValue="group" :rules="rules" validate-trigger="bind" label-position="top"
 			label-width="100%">
-			<uni-forms-item label="群聊头像:" name="headImage">
+			<uni-forms-item :label="$t('qun_liao_tou_xiang')" name="headImage">
 				<image-upload v-show="isOwner" :onSuccess="onUnloadImageSuccess">
 					<image :src="group.headImage" class="group-image"></image>
 				</image-upload>
 				<head-image  v-show="!isOwner" :name="group.remark" 
 					:url="group.headImage" :size="200"></head-image>
 			</uni-forms-item>
-			<uni-forms-item label="群聊名称:" name="name" :required="true">
-				<uni-easyinput type="text" v-model="group.name" :disabled="!isOwner" placeholder="请输入群聊名称" />
+			<uni-forms-item :label="$t('qun_liao_ming_cheng')" name="name" :required="true">
+				<uni-easyinput type="text" v-model="group.name" :disabled="!isOwner" :placeholder="$t('qing_shu_ru_qun_liao_ming_chen')" />
 			</uni-forms-item>
-			<uni-forms-item label="群聊备注:" name="remark">
-				<uni-easyinput v-model="group.remark" type="text" placeholder="请输入群聊备注" />
+			<uni-forms-item :label="$t('qun_liao_bei_zhu')" name="remark">
+				<uni-easyinput v-model="group.remark" type="text" :placeholder="$t('qing_shu_ru_qun_liao_bei_zhu')" />
 			</uni-forms-item>
-			<uni-forms-item label="我在本群的昵称:" name="email">
-				<uni-easyinput v-model="group.aliasName" type="text" placeholder="请输入群聊昵称" />
+			<uni-forms-item :label="$t('wo_zai_ben_qun_de_ni_cheng')" name="email">
+				<uni-easyinput v-model="group.aliasName" type="text" :placeholder="$t('qing_shu_ru_qun_liao_ni_cheng')" />
 			</uni-forms-item>
-			<uni-forms-item label="群公告:" name="notice">
-				<uni-easyinput type="textarea" v-model="group.notice" :disabled="!isOwner" placeholder="请输入群公告" />
+			<uni-forms-item :label="$t('qun_gong_gao')" name="notice">
+				<uni-easyinput type="textarea" v-model="group.notice" :disabled="!isOwner" :placeholder="$t('qing_shu_ru_qun_gong_gao')" />
 			</uni-forms-item>
 		</uni-forms>
-		<button type="primary" @click="submit()">提交</button>
+		<button type="primary" @click="submit()">{{ $t('ti_jiao') }}</button>
 	</view>
 </template>
 
@@ -35,7 +35,7 @@
 					name: {
 						rules: [{
 							required: true,
-							errorMessage: '请输入群聊名称',
+							errorMessage: uni.$t('qing_shu_ru_qun_liao_ming_chen'),
 						}]
 					}
 
@@ -63,7 +63,7 @@
 				}).then((group) => {
 					this.$store.commit("updateGroup", group);
 					uni.showToast({
-						title: "修改群聊信息成功",
+						title: uni.$t('xiu_gai_qun_liao_xin_xi_cheng'),
 						icon: 'none'
 					});
 					setTimeout(() => {
@@ -83,7 +83,7 @@
 				}).then((group) => {
 					this.$store.commit("addGroup", group);
 					uni.showToast({
-						title: `群聊创建成功，快邀请小伙伴进群吧`,
+						title: uni.$t('qun_liao_chuang_jian_cheng_gon'),
 						icon: 'none',
 						duration: 1500
 					});
@@ -110,8 +110,9 @@
 			},
 			initNewGroup() {
 				let userInfo = this.$store.state.userStore.userInfo;
+				let who_creaeted_the_group_chat_txt = uni.$t('qun_liao_chuang_jian_ren')
 				this.group = {
-					name: `${userInfo.userName}创建的群聊`,
+					name: `${who_creaeted_the_group_chat_txt}: ${userInfo.userName}`,
 					headImage: userInfo.headImage,
 					headImageThumb: userInfo.headImageThumb,
 					aliasName: userInfo.nickName,
