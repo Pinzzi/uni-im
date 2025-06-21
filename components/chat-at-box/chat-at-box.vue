@@ -2,9 +2,11 @@
 	<uni-popup ref="popup" type="bottom" @change="onChange">
 		<view class="chat-at-box">
 			<view class="chat-at-top">
-				<view class="chat-at-tip"> 选择要提醒的人</view>
-				<button class="chat-at-btn" type="warn" size="mini" @click="onClean()">清空 </button>
-				<button class="chat-at-btn" type="primary" size="mini" @click="onOk()">确定({{atUserIds.length}})
+				<view class="chat-at-tip">{{ $t('xuan_ze_yao_ti_xing_de_ren') }}</view>
+				<button class="chat-at-btn" type="warn" size="mini" @click="onClean()">{{ $t('qing_kong') }} </button>
+				<button class="chat-at-btn" type="primary" size="mini" @click="onOk()">
+					<span>{{ $t('que_ding') }}</span>
+					<span>({{atUserIds.length}})</span>
 				</button>
 			</view>
 			<scroll-view v-show="atUserIds.length>0" scroll-x="true" scroll-left="120">
@@ -15,7 +17,7 @@
 				</view>
 			</scroll-view>
 			<view class="search-bar">
-				<uni-search-bar v-model="searchText" cancelButton="none" placeholder="搜索"></uni-search-bar>
+				<uni-search-bar v-model="searchText" cancelButton="none" placeholder="{{ $t('sou_suo') }}"></uni-search-bar>
 			</view>
 			<view class="member-items">
 				<scroll-view class="scroll-bar" scroll-with-animation="true" scroll-y="true">
@@ -60,7 +62,7 @@
 				if(this.ownerId == userId){
 					this.showMembers.push({
 						userId:-1,
-						aliasName: "全体成员"
+						aliasName: uni.$t('quan_ti_cheng_yuan')
 					})
 				}
 				this.members.forEach((m) => {

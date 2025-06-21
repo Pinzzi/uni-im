@@ -48,7 +48,7 @@
                 </button>
             </uni-forms>
 		<uni-popup ref="deviceVerifyPopup" type="dialog">
-			<uni-popup-dialog 
+			<uni-popup-dialog
 				:title="$t('she_bei_yan_zheng')"
 				:content="$t('qing_shu_ru_yan_zheng_ma')"
 				:before-close="true"

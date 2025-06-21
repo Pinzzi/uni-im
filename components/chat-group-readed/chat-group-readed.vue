@@ -33,11 +33,24 @@
 </template>
 
 <script>
+import { ref, computed } from 'vue';
+
 	export default {
 		name: "chat-group-readed",
+		computed: {
+			items() {
+			    return [
+					uni.$t('yi_du'),
+					uni.$t('wei_du')
+				]
+			}
+		},
 		data() {
 			return {
-				items: ['已读', '未读'],
+				// items: [
+				// 	uni.$t('yi_du'),
+				// 	uni.$t('wei_du')
+				// ],
 				current: 0,
 				readedMembers: [],
 				unreadMembers: []
@@ -76,8 +89,8 @@
 							this.unreadMembers.push(member);
 						}
 					})
-					this.items[0] = `已读(${this.readedMembers.length})`;
-					this.items[1] = `未读(${this.unreadMembers.length})`;
+					this.items[0] = `${uni.$t('yi_du')}(${this.readedMembers.length})`;
+					this.items[1] = `${uni.$t('wei_du')}(${this.unreadMembers.length})`;
 					// 更新已读人数
 					this.$store.commit("updateMessage", {
 						id: this.msgInfo.id,

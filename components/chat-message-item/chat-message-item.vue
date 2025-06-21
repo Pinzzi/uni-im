@@ -29,7 +29,7 @@
 							</image>
 							<loading v-if="loading"></loading>
 						</view>
-						<text title="发送失败" v-if="loadFail" @click="onSendFail"
+						<text :title="$t('fa_song_shi_bai')" v-if="loadFail" @click="onSendFail"
 							class="send-fail iconfont icon-warning-circle-fill"></text>
 					</view>
 					<view class="chat-msg-file" v-if="msgInfo.type==$enums.MESSAGE_TYPE.FILE">
@@ -42,7 +42,7 @@
 							<view class="chat-file-icon iconfont icon-file"></view>
 							<loading v-if="loading"></loading>
 						</view>
-						<text title="发送失败" v-if="loadFail" @click="onSendFail"
+						<text :title="$t('fa_song_shi_bai')" v-if="loadFail" @click="onSendFail"
 							class="send-fail iconfont icon-warning-circle-fill"></text>
 					</view>
 					<view class="chat-msg-audio chat-msg-text" v-if="msgInfo.type==$enums.MESSAGE_TYPE.AUDIO"
@@ -60,13 +60,13 @@
 					</view>
 					<view class="chat-msg-status" v-if="!isRTMessage">
 						<text class="chat-readed" v-show="msgInfo.selfSend && !msgInfo.groupId
-								&& msgInfo.status==$enums.MESSAGE_STATUS.READED">已读</text>
+								&& msgInfo.status==$enums.MESSAGE_STATUS.READED">{{ $t('yi_du') }}</text>
 						<text class="chat-unread" v-show="msgInfo.selfSend && !msgInfo.groupId 
-								&& msgInfo.status!=$enums.MESSAGE_STATUS.READED">未读</text>
+								&& msgInfo.status!=$enums.MESSAGE_STATUS.READED">{{ $t('wei_du') }}</text>
 					</view>
 					<view class="chat-receipt" v-show="msgInfo.receipt" @click="onShowReadedBox">
 						<text v-if="msgInfo.receiptOk" class="tool-icon iconfont icon-ok"></text>
-						<text v-else>{{msgInfo.readedCount}}人已读</text>
+						<text v-else>{{msgInfo.readedCount}}{{ $t('yi_du') }}</text>
 					</view>
 				</view>
 			</view>
@@ -138,7 +138,7 @@
 			},
 			onSendFail() {
 				uni.showToast({
-					title: "该文件已发送失败，目前不支持自动重新发送，建议手动重新发送",
+					title: uni.$t('gai_wen_jian_yi_fa_song_shi_ba'),
 					icon: "none"
 				})
 			},
@@ -206,20 +206,20 @@
 				let items = [];
 				items.push({
 					key: 'DELETE',
-					name: '删除',
+					name: uni.$t('shan_chu'),
 					icon: 'trash'
 				});
 				if (this.msgInfo.selfSend && this.msgInfo.id > 0) {
 					items.push({
 						key: 'RECALL',
-						name: '撤回',
+						name: uni.$t('che_hui'),
 						icon: 'refreshempty'
 					});
 				}
 				if (this.msgInfo.type == this.$enums.MESSAGE_TYPE.FILE) {
 					items.push({
 						key: 'DOWNLOAD',
-						name: '下载并打开',
+						name: uni.$t('xia_zai_bing_da_kai'),
 						icon: 'download'
 					});
 				}

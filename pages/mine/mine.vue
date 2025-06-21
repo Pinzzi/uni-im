@@ -15,10 +15,10 @@
 						color="darkred"></text>
 				</view>
 				<text>
-					昵称 ：{{userInfo.nickName}}
+					{{ $t('ni_cheng') }} ：{{userInfo.nickName}}
 				</text>
 				<text>
-					签名 ：{{userInfo.signature}}
+					{{ $t('qian_ming') }} ：{{userInfo.signature}}
 				</text>
 			</view>
 			<view class="info-arrow">></view>
@@ -28,8 +28,8 @@
 			<theme-switcher class="theme-switcher"></theme-switcher>
 		</view>
 		<view class="btn-group">
-			<button class="btn" type="primary" @click="onModifyPassword()">修改密码</button>
-			<button class="btn" type="warn" @click="onQuit()">退出</button>
+			<button class="btn" type="primary" @click="onModifyPassword()">{{ $t('xiu_gai_mi_ma') }}</button>
+			<button class="btn" type="warn" @click="onQuit()">{{ $t('tui_chu') }}</button>
 		</view>
 	</view>
 </template>
@@ -57,7 +57,7 @@
 			},
 			onQuit() {
 				uni.showModal({
-					title: '确认退出?',
+					title: uni.$t('que_ren_tui_chu'),
 					success: (res) => {
 						if (res.confirm) {
 							getApp().exit()

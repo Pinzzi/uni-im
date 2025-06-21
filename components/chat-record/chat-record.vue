@@ -4,7 +4,13 @@
 			@click.stop=""
 			@touchstart.prevent="onStartRecord"
 			@touchmove.prevent="onTouchMove" 
-			@touchend.prevent="onEndRecord">{{recording?'正在录音':'长按 说话'}}</view>
+			@touchend.prevent="onEndRecord"
+		>
+			<!-- {{recording?'正在录音':'长按 说话'}} -->
+			<span v-if="recording">{{ $t('zheng_zai_lu_yin') }}</span>
+			<span v-else>{{ $t('chang_an_shuo_hua') }}</span>
+
+		</view>
 		<view v-if="recording" class="chat-record-window" :style="recordWindowStyle">
 			<view class="rc-wave">
 				<text class="note" style="--d: 0"></text>
@@ -20,7 +26,11 @@
 				<uni-icons :class="moveToCancel?'red':'black'" type="clear" 
 				:size="moveToCancel?45:40"></uni-icons>
 			</view>
-			<view class="opt-tip" :class="moveToCancel?'red':'black'">{{moveToCancel? '松手取消':'松手发送,上划取消'}}</view>
+			<view class="opt-tip" :class="moveToCancel?'red':'black'">
+				<!-- {{moveToCancel? '松手取消':'松手发送,上划取消'}} -->
+				<span v-if="moveToCancel">{{ $t('song_shou_qu_xiao') }}</span>
+				<span v-else>{{ $t('song_shou_fa_song_shang_hua_qu') }}</span>
+			</view>
 		</view>
 
 	</view>
@@ -67,7 +77,7 @@
 				}).catch((e) => {
 					console.log("录音失败"+JSON.stringify(e))
 					uni.showToast({
-						title: "录音失败",
+						title: uni.$t('lu_yin_shi_bai'),
 						icon: "none"
 					});
 				});
@@ -87,7 +97,7 @@
 				// 小于1秒不发送
 				if (this.druation == 0) {
 					uni.showToast({
-						title: "说话时间太短",
+						title: uni.$t('shuo_hua_shi_jian_tai_duan'),
 						icon: 'none'
 					})
 					this.$rc.close();
@@ -139,13 +149,15 @@
 				return `background-color:${bgColor};`
 			},
 			recordTip(){
+				const romaindTipTxt = uni.$t('ke_lu_yin_shi_chang')
+				const audioTimeTxt = uni.$t('lu_yin_shi_chang')
+				const miao_Txt = uni.$t('miao')
 				if(this.druation > 50){
-					return `${60-this.druation}s后将停止录音`;
+					return `${romaindTipTxt}${60-this.druation}${miao_Txt}`;
 				}
-				return `录音时长:${this.druation}s`;
+				return `${audioTimeTxt}:${this.druation}${miao_Txt}`;
 			}
 		}
-
 	}
 </script>
 

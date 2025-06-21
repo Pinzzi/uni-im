@@ -6,9 +6,9 @@
 			<view class="friend-name">{{ friend.nickName}}</view>
 			<view class="friend-online">
 				<image v-show="friend.onlineWeb" class="online" src="/static/image/online_web.png"
-					title="电脑设备在线" />
+					:title="$t('pc_she_bei_zai_xian-0')" />
 				<image v-show="friend.onlineApp" class="online" src="/static/image/online_app.png"
-					title="移动设备在线" />
+					:title="$t('yi_dong_she_bei_zai_xian')" />
 			</view>
 		</view>
 	</view>

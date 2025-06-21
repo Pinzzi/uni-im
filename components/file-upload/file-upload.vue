@@ -42,9 +42,10 @@
 				chooseFile({
 					success: (res) => {
 						res.tempFiles.forEach((file) => {
+							const limiteTip = uni.$t('wen_jian_da_xiao_bu_neng_chao')
 							// 校验大小
 							if (this.maxSize && file.size > this.maxSize) {
-								this.$message.error(`文件大小不能超过 ${this.fileSizeStr}!`);
+								this.$message.error(`${limiteTip} ${this.fileSizeStr}!`);
 								this.$emit("fail", file);
 								return;
 							}

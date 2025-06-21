@@ -5,7 +5,7 @@
 		<view class="avatar-text" v-if="!url" :style="avatarTextStyle">
 			{{name.substring(0,1).toUpperCase()}}
 		</view>
-		<view v-if="online" class="online" title="用户当前在线">
+		<view v-if="online" class="online" :title="$t('yong_hu_dang_qian_zai_xian')">
 		</view>
 	</view>
 </template>

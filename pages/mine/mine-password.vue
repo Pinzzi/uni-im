@@ -1,16 +1,16 @@
 <template>
 	<view class="page mine-password">
 		<uni-forms ref="form" :modelValue="formData" label-position="top" label-width="100%" >
-			<uni-forms-item label="原密码:" name="oldPassword">
+			<uni-forms-item :label="$t('yuan_mi_ma')" name="oldPassword">
 				<uni-easyinput type="password" v-model="formData.oldPassword" />
 			</uni-forms-item>
-			<uni-forms-item label="新密码:" name="newPassword">
+			<uni-forms-item :label="$t('xin_mi_ma')" name="newPassword">
 				<uni-easyinput type="password" v-model="formData.newPassword" />
 			</uni-forms-item>
-			<uni-forms-item label="确认密码:" name="confirmPassword">
+			<uni-forms-item :label="$t('que_ren_mi_ma')" name="confirmPassword">
 				<uni-easyinput type="password" v-model="formData.confirmPassword" />
 			</uni-forms-item>
-			<button type="primary" @click="onSubmit()">提交</button>
+			<button type="primary" @click="onSubmit()">{{ $t('ti_jiao') }}</button>
 		</uni-forms>
 
 	</view>
@@ -75,7 +75,7 @@
 						data: this.formData
 					}).then((res) => {
 						uni.showToast({
-							title: "修改密码成功",
+							title: uni.$t('xiu_gai_mi_ma_cheng_gong'),
 							icon: 'none'
 						})
 						setTimeout(()=>{
