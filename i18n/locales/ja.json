@@ -6,9 +6,15 @@
   "deng_lu_shi_bai": "ログインに失敗しました",
   "huan_ying_deng_lu": "ログインへようこそ",
   "mi_ma": "パスワード",
+  "mi_ma_chang_du_bu_neng_xiao_yu_16": "パスワードの長さは16桁未満にすることはできません",
+  "mi_ma_chang_du_bu_neng_xiao_yu_16_wei": "パスワードの長さは16桁未満にすることはできません",
+  "mi_ma_chang_du_bu_neng_xiao_yu_8_wei": "パスワードの長さは8桁未満にすることはできません",
+  "mi_ma_ge_shi_bu_zheng_que": "パスワード形式のエラー：高級文字と小文字、数字、または特殊文字を含める必要があります",
+  "mi_ma_ge_shi_cuo_wu": "パスワードは16桁または文字でなければなりません",
   "mo_ren_zhu_ti": "デフォルトのテーマ",
   "qing_shu_ru_mi_ma": "パスワードを入力してください",
   "qing_shu_ru_yong_hu_ming": "ユーザー名を入力してください",
   "sheng_yu_ji_hui": "残りのログインの機会",
+  "wu_xiao_de_mi_yao": "無効なキー",
   "yong_hu_ming": "ユーザー名"
 }

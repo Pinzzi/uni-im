@@ -6,9 +6,15 @@
   "deng_lu_shi_bai": "Accesso non riuscito",
   "huan_ying_deng_lu": "Benvenuto nell'accedere",
   "mi_ma": "password",
+  "mi_ma_chang_du_bu_neng_xiao_yu_16": "La lunghezza della password non può essere inferiore a 16 cifre",
+  "mi_ma_chang_du_bu_neng_xiao_yu_16_wei": "La lunghezza della password non può essere inferiore a 16 cifre",
+  "mi_ma_chang_du_bu_neng_xiao_yu_8_wei": "La lunghezza della password non può essere inferiore a 8 cifre",
+  "mi_ma_ge_shi_bu_zheng_que": "Errore del formato della password: deve contenere lettere, numeri o caratteri speciali",
+  "mi_ma_ge_shi_cuo_wu": "La password deve essere di 16 cifre o lettere",
   "mo_ren_zhu_ti": "Tema predefinito",
   "qing_shu_ru_mi_ma": "Inserisci la tua password",
   "qing_shu_ru_yong_hu_ming": "Inserisci il tuo nome utente",
   "sheng_yu_ji_hui": "Opportunità di accesso rimanenti",
+  "wu_xiao_de_mi_yao": "Chiave non valida",
   "yong_hu_ming": "nome utente"
 }

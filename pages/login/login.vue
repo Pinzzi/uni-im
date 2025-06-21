@@ -410,7 +410,7 @@ export default {
     height: 88rpx;
     line-height: 88rpx;
     border-radius: 10rpx;
-    background-color: var(--primary-color, #007AFF);
+    background-color: var(--theme-primary);
     color: #FFFFFF;
     font-size: 32rpx;
     margin-top: 40rpx;

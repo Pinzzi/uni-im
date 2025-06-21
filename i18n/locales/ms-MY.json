@@ -6,9 +6,15 @@
   "deng_lu_shi_bai": "Log masuk gagal",
   "huan_ying_deng_lu": "Selamat Datang di Log Masuk",
   "mi_ma": "kata laluan",
+  "mi_ma_chang_du_bu_neng_xiao_yu_16": "Panjang kata laluan tidak boleh kurang daripada 16 digit",
+  "mi_ma_chang_du_bu_neng_xiao_yu_16_wei": "Panjang kata laluan tidak boleh kurang daripada 16 digit",
+  "mi_ma_chang_du_bu_neng_xiao_yu_8_wei": "Panjang kata laluan tidak boleh kurang daripada 8 digit",
+  "mi_ma_ge_shi_bu_zheng_que": "Ralat Format Kata Laluan: Harus mengandungi huruf, nombor atau watak khas atas dan bawah",
+  "mi_ma_ge_shi_cuo_wu": "Kata laluan mestilah 16 digit atau huruf",
   "mo_ren_zhu_ti": "Tema lalai",
   "qing_shu_ru_mi_ma": "Sila masukkan kata laluan anda",
   "qing_shu_ru_yong_hu_ming": "Sila masukkan nama pengguna anda",
   "sheng_yu_ji_hui": "Peluang masuk yang tinggal",
+  "wu_xiao_de_mi_yao": "Kunci tidak sah",
   "yong_hu_ming": "nama pengguna"
 }

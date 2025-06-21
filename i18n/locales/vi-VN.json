@@ -6,9 +6,15 @@
   "deng_lu_shi_bai": "Đăng nhập không thành công",
   "huan_ying_deng_lu": "Chào mừng bạn đến để đăng nhập",
   "mi_ma": "mật khẩu",
+  "mi_ma_chang_du_bu_neng_xiao_yu_16": "Độ dài mật khẩu không thể dưới 16 chữ số",
+  "mi_ma_chang_du_bu_neng_xiao_yu_16_wei": "Độ dài mật khẩu không thể dưới 16 chữ số",
+  "mi_ma_chang_du_bu_neng_xiao_yu_8_wei": "Độ dài mật khẩu không thể dưới 8 chữ số",
+  "mi_ma_ge_shi_bu_zheng_que": "Lỗi định dạng mật khẩu: Phải chứa các chữ cái, số hoặc ký tự đặc biệt trên và chữ thường",
+  "mi_ma_ge_shi_cuo_wu": "Mật khẩu phải là 16 chữ số hoặc chữ cái",
   "mo_ren_zhu_ti": "Chủ đề mặc định",
   "qing_shu_ru_mi_ma": "Vui lòng nhập mật khẩu của bạn",
   "qing_shu_ru_yong_hu_ming": "Vui lòng nhập tên người dùng của bạn",
   "sheng_yu_ji_hui": "Cơ hội đăng nhập còn lại",
+  "wu_xiao_de_mi_yao": "Khóa không hợp lệ",
   "yong_hu_ming": "Tên người dùng"
 }

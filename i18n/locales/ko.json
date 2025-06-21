@@ -6,9 +6,15 @@
   "deng_lu_shi_bai": "로그인이 실패했습니다",
   "huan_ying_deng_lu": "로그인에 오신 것을 환영합니다",
   "mi_ma": "비밀번호",
+  "mi_ma_chang_du_bu_neng_xiao_yu_16": "비밀번호 길이는 16 자리 미만일 수 없습니다",
+  "mi_ma_chang_du_bu_neng_xiao_yu_16_wei": "비밀번호 길이는 16 자리 미만일 수 없습니다",
+  "mi_ma_chang_du_bu_neng_xiao_yu_8_wei": "비밀번호 길이는 8 자리 미만일 수 없습니다",
+  "mi_ma_ge_shi_bu_zheng_que": "비밀번호 형식 오류 : 상단 및 소문자, 숫자 또는 특수 문자가 포함되어야합니다.",
+  "mi_ma_ge_shi_cuo_wu": "비밀번호는 16 자리 또는 문자 여야합니다",
   "mo_ren_zhu_ti": "기본 테마",
   "qing_shu_ru_mi_ma": "비밀번호를 입력하십시오",
   "qing_shu_ru_yong_hu_ming": "사용자 이름을 입력하십시오",
   "sheng_yu_ji_hui": "나머지 로그인 기회",
+  "wu_xiao_de_mi_yao": "잘못된 키",
   "yong_hu_ming": "사용자 이름"
 }
