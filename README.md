@@ -112,3 +112,9 @@ npm run build:mp-weixin
 - 跨域问题处理参考 vite.config.js 的配置
 - 建议使用 HBuilderX 进行开发调试
 - 注意保持Node.js版本兼容性
+
+#### 线路配置
+- BASE_URL
+- https://api.gemeney-st.xyz/imapi
+- WSS
+- wss://api.gemeney-st.xyz/ws
