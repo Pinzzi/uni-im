@@ -8,6 +8,8 @@
 				:lang-name="languageTransition.langName"
 			/>
 			<LanguageSwitcher />
+			<!-- 开发环境下显示mock模式切换按钮 -->
+			<button v-if="isDev" class="mock-btn" @tap="toggleMockMode">{{ isMockEnabled ? '禁用Mock' : '启用Mock' }}</button>
 		</view>
 		<view class="login-title">{{ $t('huan_ying_deng_lu') }}</view>
             <uni-forms 
@@ -300,9 +302,22 @@ export default {
 			uni.setStorageSync('lastLoginTime', Date.now())
 
 			getApp().init()
-			uni.switchTab({
-				url: "/pages/chat/chat"
-			})
+			// 添加延迟，避免初始化和导航冲突
+			setTimeout(() => {
+				uni.switchTab({
+					url: "/pages/chat/chat",
+					success: () => {
+						console.log('登录成功，导航至聊天页面成功')
+					},
+					fail: (err) => {
+						console.error('登录成功，但导航至聊天页面失败:', err)
+						// 如果switchTab失败，尝试使用reLaunch
+						uni.reLaunch({
+							url: "/pages/chat/chat"
+						})
+					}
+				})
+			}, 300)
 		},
 
 	handleLoginError(error) {
@@ -335,6 +350,45 @@ export default {
 			icon: 'none',
 			duration: 2000
 		});
+	},
+	
+	// 切换Mock模式
+	toggleMockMode() {
+	    if (!this.isDev) return;
+
+	    const newState = !this.isMockEnabled;
+	    this.isMockEnabled = newState;
+	    uni.setStorageSync('enableMock', newState);
+
+	    // 如果有全局mock控制方法，就使用它
+	    if (this.$mock) {
+	        this.$mock.toggle(newState);
+	        return;
+	    }
+
+	    // 否则尝试重新加载页面应用新设置
+	    if (newState) {
+	        uni.showToast({
+	            title: '已启用Mock模式，将自动登录',
+	            icon: 'none'
+	        });
+
+	        // 尝试引入并使用mock
+	        import('../../mock/autoLogin.js').then(module => {
+	            module.toggleMockMode(true);
+	        }).catch(err => {
+	            console.error('加载Mock模块失败:', err);
+	        });
+	    } else {
+	        uni.showToast({
+	            title: '已禁用Mock模式，需要手动登录',
+	            icon: 'none'
+	        });
+
+	        // 清除登录信息
+	        uni.removeStorageSync('loginInfo');
+	        uni.removeStorageSync('lastLoginTime');
+	    }
 	}
 	},
 
@@ -359,6 +413,11 @@ export default {
 		await this.generateFingerprint()
 		const savedAttempts = this.$store.state.deviceAttempts || {}
 		this.deviceAttempts = savedAttempts
+		
+		// 检查Mock模式是否已启用
+		if (this.isDev) {
+		    this.isMockEnabled = uni.getStorageSync('enableMock') || false
+		}
 	}
 }
 </script>
@@ -409,7 +468,7 @@ export default {
     width: 100%;
     height: 88rpx;
     line-height: 88rpx;
-    border-radius: 10rpx;
+    border-radius: 20rpx;
     background-color: var(--theme-primary);
     color: #FFFFFF;
     font-size: 32rpx;
@@ -427,6 +486,18 @@ export default {
     font-size: 17px;
     background-color: var(--theme-secondary-color);
     color: var(--theme-text);
+  }
+  .mock-btn {
+    position: absolute;
+    top: 5px;
+    right: 100px;
+    padding: 6px 10px;
+    font-size: 12px;
+    background-color: var(--theme-secondary-color);
+    color: var(--theme-text);
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    z-index: 999;
   }
 }
 </style>

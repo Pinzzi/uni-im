@@ -1,18 +1,11 @@
 <template>
   <view class="theme-switcher">
-    <view 
-      class="theme-option"
-      :class="{ active: currentTheme === 'default' }"
-      @click="switchTheme('default')"
-    >
-      <text>默认主题</text>
-    </view>
-    <view 
-      class="theme-option"
-      :class="{ active: currentTheme === 'dark' }"
-      @click="switchTheme('dark')"
-    >
-      <text>暗黑主题</text>
+    <view class="switch-container" @click="toggleTheme">
+      <view class="switch-track">
+        <text class="icon sun-icon" :class="{ active: currentTheme === 'default' }">☀️</text>
+        <text class="icon moon-icon" :class="{ active: currentTheme === 'dark' }">🌙</text>
+      </view>
+      <view class="switch-thumb" :class="{ 'is-dark': currentTheme === 'dark' }"></view>
     </view>
   </view>
 </template>
@@ -32,6 +25,11 @@ export default {
   methods: {
     async switchTheme(themeName) {
       await this.$store.dispatch('themeStore/switchTheme', themeName)
+    },
+    
+    async toggleTheme() {
+      const newTheme = this.currentTheme === 'default' ? 'dark' : 'default'
+      await this.switchTheme(newTheme)
     }
   }
 }
@@ -41,23 +39,52 @@ export default {
 .theme-switcher {
   display: flex;
   padding: 10px;
-  gap: 10px;
+  justify-content: center;
 
-  .theme-option {
-    padding: 8px 16px;
-    border-radius: 4px;
-    background-color: var(--theme-primary);
-    color: var(--theme-text);
+  .switch-container {
+    position: relative;
     cursor: pointer;
-    transition: var(--theme-transition);
+    width: 70px;
+    height: 34px;
+  }
 
-    &.active {
-      background-color: var(--theme-primary);
-      color: #fff;
+  .switch-track {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    background-color: #e0e8ed; // #dfdfdf;
+    border-radius: 34px;
+    padding: 0 5px;
+    box-sizing: border-box;
+    transition: background-color 0.3s ease;
+
+    .icon {
+      font-size: 16px;
+      opacity: 0.5;
+      transition: opacity 0.3s ease;
+      z-index: 1;
+
+      &.active {
+        opacity: 1;
+      }
     }
+  }
 
-    &:hover {
-      opacity: 0.8;
+  .switch-thumb {
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    width: 26px;
+    height: 26px;
+    background-color: white;
+    border-radius: 50%;
+    transition: transform 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+
+    &.is-dark {
+      transform: translateX(36px);
     }
   }
 }

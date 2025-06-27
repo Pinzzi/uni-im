@@ -6,8 +6,8 @@ export default {
   // 主题变量
   variables: {
     // 主色
-    'primary': '#007AFF',
-    'primary-color': '#007AFF',
+    'primary': '#3d6deb',
+    'primary-color': '#3d6deb',
     'primary-color-hover': '#409EFF',
     'primary-color-pressed': '#0060CB',
     'primary-color-disabled': '#0A84FF40',

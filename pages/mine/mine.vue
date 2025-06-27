@@ -1,9 +1,11 @@
 <template>
 	<view class="page mine">
 		<view class="content" @click="onModifyInfo()">
-			<head-image :name="userInfo.nickName"  
+			<head-image
+				:name="userInfo.nickName"  
 				:url="userInfo.headImage"
-				:size="160"></head-image>
+				:size="160"
+			></head-image>
 			<view class="info-item">
 				<view class="info-primary">
 					<text class="info-username">
@@ -21,15 +23,53 @@
 					{{ $t('qian_ming') }} ：{{userInfo.signature}}
 				</text>
 			</view>
-			<view class="info-arrow">></view>
+			<view class="info-arrow"></view>
 		</view>
 		<view class="line"></view>
 		<view class="settings-group">
-			<theme-switcher class="theme-switcher"></theme-switcher>
-		</view>
-		<view class="btn-group">
-			<button class="btn" type="primary" @click="onModifyPassword()">{{ $t('xiu_gai_mi_ma') }}</button>
-			<button class="btn" type="warn" @click="onQuit()">{{ $t('tui_chu') }}</button>
+			<view class="settings-item" @click="onModifyPassword()">
+				<image class="item-icon" src="@/static/settings/keys.png"></image>
+				<!-- <text class="item-icon iconfont icon-password"></text> -->
+				<text class="item-text">{{ $t('xiu_gai_mi_ma') }}</text>
+				<text class="item-arrow"></text>
+			</view>
+
+			<view class="settings-item" @click="onSecurityPrivacy()">
+				<image class="item-icon" src="@/static/settings/security_privacy.png"></image>
+				<!-- <text class="item-icon iconfont icon-security"></text> -->
+				<text class="item-text">安全隐私</text>
+				<text class="item-arrow"></text>
+			</view>
+
+			<view class="settings-item" @click="onLanguageChange()">
+				<image class="item-icon" src="@/static/settings/language_switcher.png"></image>
+				<!-- <text class="item-icon iconfont icon-language"></text> -->
+				<text class="item-text">语言切换</text>
+				<text class="item-arrow"></text>
+			</view>
+
+			<view class="settings-item" @click="onNotificationSettings()">
+				<image class="item-icon" src="@/static/settings/bell.png"></image>
+				<!-- <text class="item-icon iconfont icon-notification"></text> -->
+				<text class="item-text">通知设置</text>
+				<text class="item-arrow"></text>
+			</view>
+
+			<view class="settings-item" @click="onStorageCleanup()">
+				<image class="item-icon" src="@/static/settings/delete.png"></image>
+				<!-- <text class="item-icon iconfont icon-storage"></text> -->
+				<text class="item-text">清理存储空间</text>
+				<text class="item-arrow"></text>
+			</view>
+
+			<view class="settings-item" @click="onDarkMode()">
+				<image class="item-icon" src="@/static/settings/dark_mode_switch.png"></image>
+				<!-- <text class="item-icon iconfont icon-theme"></text> -->
+				<text class="item-text">深色模式</text>
+				<text class="item-arrow"></text>
+			</view>
+
+			<button class="logout-button" @click="onQuit()">{{ $t('tui_chu_deng_lu') }}</button>
 		</view>
 	</view>
 </template>
@@ -42,7 +82,9 @@
 			ThemeSwitcher
 		},
 		data() {
-			return {}
+			return {
+				showDarkModeSubMenu: false
+			}
 		},
 		methods: {
 			onModifyInfo() {
@@ -54,6 +96,35 @@
 				uni.navigateTo({
 					url: "/pages/mine/mine-password"
 				})
+			},
+			onSecurityPrivacy() {
+				uni.showToast({
+					title: '安全隐私功能开发中',
+					icon: 'none'
+				});
+			},
+			onLanguageChange() {
+				uni.showToast({
+					title: '语言切换功能开发中',
+					icon: 'none'
+				});
+			},
+			onNotificationSettings() {
+				uni.showToast({
+					title: '通知设置功能开发中',
+					icon: 'none'
+				});
+			},
+			onStorageCleanup() {
+				uni.showToast({
+					title: '清理存储功能开发中',
+					icon: 'none'
+				});
+			},
+			onDarkMode() {
+				uni.navigateTo({
+					url: "/pages/mine/dark-mode"
+				});
 			},
 			onQuit() {
 				uni.showModal({
@@ -122,17 +193,60 @@
 
 		.settings-group {
 			padding: 0 40rpx;
-			
-			.theme-switcher {
-				margin: 20rpx 0;
+
+			.settings-item {
+				display: flex;
+				align-items: center;
+				padding: 30rpx 0;
+				border-bottom: 1px solid #eeeeee;
+
+				.item-icon {
+					font-size: 36rpx;
+					margin-right: 20rpx;
+					width: 40rpx;
+					height: 40rpx;
+					text-align: center;
+				}
+
+				.item-text {
+					flex: 1;
+					font-size: 32rpx;
+				}
+
+				.item-arrow {
+					font-size: 30rpx;
+					font-weight: 600;
+					color: #999999;
+				}
+
 			}
-		}
 
-		.btn-group {
-			margin: 60rpx;
+			.logout-button {
+				margin-top: 100rpx;
+				width: 90%;
+				height: 80rpx;
+				line-height: 80rpx;
+				text-align: center;
+				background-color: #eaeaea;
+				color: #233333;
+				border-radius: 20rpx;
+				border: none;
+				font-size: 34rpx;
+				box-shadow: 0 6rpx 8rpx rgba(0, 0, 0, 0.1), 0 1rpx 3rpx rgba(0, 0, 0, 0.08);
+				transition: background-color 0.3s, color 0.3s;
+			}
+			.logout-button:hover {
+				background-color: #cdcdcd;
+				color: #333;
+			}
 
-			.btn {
-				margin-top: 20rpx;
+			.sub-menu {
+				padding-left: 60rpx;
+				background-color: rgba(0, 0, 0, 0.02);
+
+				.theme-switcher {
+					margin: 20rpx 0;
+				}
 			}
 		}
 	}

@@ -4,6 +4,8 @@ const ENV = "DEV";
 const DEFAULT_CONFIG = {
     BASE_URL: "http://127.0.0.1:8888",
     WS_URL: "ws://127.0.0.1:8878/im",
+    // const api_url = "https://api.gemeney-st.xyz/imapi";
+    // const wss_url = "wss://api.gemeney-st.xyz/ws";
     ENABLE_ENCRYPTION: false,
     CRYPTO_KEY: "dev-key-123",
     TOKEN_EXPIRE: 86400,
@@ -21,6 +23,7 @@ const PROD_CONFIG = {
     BASE_URL: "https://www.im.online/api",
     WS_URL: "wss://www.im.online:81/im",
     ENABLE_ENCRYPTION: true,
+    
     CRYPTO_KEY: "your-production-key",
     TOKEN_EXPIRE: 3600,
     MAX_LOGIN_ATTEMPTS: 5,
