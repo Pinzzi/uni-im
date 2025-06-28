@@ -32,6 +32,16 @@
 		"path": "pages/mine/mine-edit"
 	},{
 		"path": "pages/mine/mine-password"
+	},{
+		"path": "pages/mine/mine-language"
+	},{
+		"path": "pages/mine/notification-settings"
+	},{
+		"path": "pages/mine/security-privacy"
+	},{
+		"path": "pages/mine/storage-cleanup"
+	},{
+		"path": "pages/mine/dark-mode"
 	}
 	],
 	"globalStyle": {

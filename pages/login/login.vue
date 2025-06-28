@@ -9,7 +9,7 @@
 			/>
 			<LanguageSwitcher />
 			<!-- 开发环境下显示mock模式切换按钮 -->
-			<button v-if="isDev" class="mock-btn" @tap="toggleMockMode">{{ isMockEnabled ? '禁用Mock' : '启用Mock' }}</button>
+			<!-- <button v-if="isDev" class="mock-btn" @tap="toggleMockMode">{{ isMockEnabled ? '禁用Mock' : '启用Mock' }}</button> -->
 		</view>
 		<view class="login-title">{{ $t('huan_ying_deng_lu') }}</view>
             <uni-forms 
@@ -70,6 +70,7 @@ import languageSwitchTransition from '@/components/language-switch-transition/in
 import ThemePicker from '@/components/theme-picker/index.vue';
 import { encryptData } from '@/common/crypto.js';
 import { deviceFingerprint } from '@/utils/device.js';
+import { config } from '@/config/env.js';
 
 export default {
 	components: {
@@ -81,9 +82,11 @@ export default {
 	setup() {
 		const store = useStore()
 		const languageTransition = computed(() => store.state.transitionStore.languageTransition)
+		const isDev = config.isDevelopment
 
 		return {
-			languageTransition
+			languageTransition,
+			isDev
 		}
 	},
 
@@ -105,7 +108,8 @@ export default {
 			lockoutTime: 0,
 			verificationCode: '',
 			hasLoginButRejected: false,
-			isNewDevice: false
+			isNewDevice: false,
+			isMockEnabled: false
 		}
 	},
 	

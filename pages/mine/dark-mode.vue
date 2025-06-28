@@ -1,8 +1,5 @@
 <template>
 	<view class="page dark-mode">
-		<view class="content-title">
-			<text>深色模式设置</text>
-		</view>
 		<view class="settings-group">
 			<theme-switcher class="theme-switcher"></theme-switcher>
 			<view class="setting-description">
@@ -32,6 +29,8 @@
 			padding: 30rpx 40rpx;
 			font-size: 36rpx;
 			font-weight: 600;
+			text-align: center;
+			color: #666666;
 		}
 
 		.settings-group {
@@ -43,6 +42,7 @@
 
 			.setting-description {
 				margin-top: 20rpx;
+				text-align: center;
 				font-size: 28rpx;
 				color: #666666;
 			}

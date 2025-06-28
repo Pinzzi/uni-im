@@ -1,10 +1,21 @@
 <template>
 	<view class="head-image" @click="showUserInfo($event)" :title="name">
-		<image class="avatar-image" v-if="url" :src="url" 
-		:style="avatarImageStyle"  lazy-load="true"  mode="aspectFill"/>
-		<view class="avatar-text" v-if="!url" :style="avatarTextStyle">
-			{{name.substring(0,1).toUpperCase()}}
-		</view>
+		<image class="avatar-image"
+			v-if="url"
+			:src="url" 
+			:style="avatarImageStyle"
+			lazy-load="true"
+		mode="aspectFill"
+		/>
+		<!-- <view class="avatar-text" v-if="!url" :style="avatarTextStyle">
+			{{ name.substring(0,1).toUpperCase() }}
+		</view> -->
+		<image
+			v-if="!url"
+			src="@/static/image/meerkat.png"
+			mode="scaleToFill"
+			style="width: 100rpx; height: 100rpx; border-radius: 100rpx; margin-left: 20rpx; vertical-align: bottom;"
+		/>
 		<view v-if="online" class="online" :title="$t('yong_hu_dang_qian_zai_xian')">
 		</view>
 	</view>

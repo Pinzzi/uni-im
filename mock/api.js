@@ -2,14 +2,28 @@
 import { mockUser } from './user.js';
 
 // 模拟登录响应数据
-const mockLoginResponse = {
-  code: 200,
-  data: {
-    user: mockUser,
-    token: mockUser.token,
-    expires: Date.now() + 24 * 60 * 60 * 1000 // 24小时后过期
-  },
-  message: '登录成功'
+const mockLoginResponse = function(req) {
+  // 获取存储的token，如果存在并且未过期则继续使用
+  let token = uni.getStorageSync('token') || mockUser.token;
+  let expires = uni.getStorageSync('token_expires') || (Date.now() + 24 * 60 * 60 * 1000);
+
+  // 创建响应数据
+  const response = {
+    code: 200,
+    data: {
+      user: mockUser,
+      token: token,
+      expires: expires
+    },
+    message: '登录成功'
+  };
+
+  // 存储token信息以便刷新页面后仍然可用
+  uni.setStorageSync('token', response.data.token);
+  uni.setStorageSync('token_expires', response.data.expires);
+  uni.setStorageSync('user', JSON.stringify(mockUser));
+
+  return response;
 };
 
 // 定义需要拦截的 API 路径
@@ -34,7 +48,8 @@ export function setupMockAPI() {
 
         // 模拟网络延迟
         setTimeout(() => {
-          const response = MOCK_APIS[path];
+          const handler = MOCK_APIS[path];
+          const response = typeof handler === 'function' ? handler(options) : handler;
           if (options.success) {
             options.success(response);
           }
@@ -71,7 +86,9 @@ export function setupMockHttp(app) {
         // 返回模拟响应的 Promise
         return new Promise((resolve) => {
           setTimeout(() => {
-            resolve(MOCK_APIS[path].data);
+            const handler = MOCK_APIS[path];
+            const response = typeof handler === 'function' ? handler(options) : handler;
+            resolve(response.data);
           }, 300);
         });
       }

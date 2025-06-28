@@ -6,6 +6,11 @@
 				:url="userInfo.headImage"
 				:size="160"
 			></head-image>
+			<!-- <image
+				src="@/static/image/meerkat.png"
+				mode="scaleToFill"
+				style="width: 60px; height: 60px; border-radius: 60px; margin-left: 15px;"
+			/> -->
 			<view class="info-item">
 				<view class="info-primary">
 					<text class="info-username">
@@ -28,7 +33,7 @@
 		<view class="line"></view>
 		<view class="settings-group">
 			<view class="settings-item" @click="onModifyPassword()">
-				<image class="item-icon" src="@/static/settings/keys.png"></image>
+				<image class="item-icon" src="@/static/settings/key.png"></image>
 				<!-- <text class="item-icon iconfont icon-password"></text> -->
 				<text class="item-text">{{ $t('xiu_gai_mi_ma') }}</text>
 				<text class="item-arrow"></text>
@@ -41,8 +46,8 @@
 				<text class="item-arrow"></text>
 			</view>
 
-			<view class="settings-item" @click="onLanguageChange()">
-				<image class="item-icon" src="@/static/settings/language_switcher.png"></image>
+			<view class="settings-item" @click="navigateToLanguageSettings()">
+				<image class="item-icon" src="@/static/settings/language.png"></image>
 				<!-- <text class="item-icon iconfont icon-language"></text> -->
 				<text class="item-text">语言切换</text>
 				<text class="item-arrow"></text>
@@ -56,9 +61,9 @@
 			</view>
 
 			<view class="settings-item" @click="onStorageCleanup()">
-				<image class="item-icon" src="@/static/settings/delete.png"></image>
+				<image class="item-icon" src="/static/settings/delete.png"></image>
 				<!-- <text class="item-icon iconfont icon-storage"></text> -->
-				<text class="item-text">清理存储空间</text>
+				<text class="item-text">{{ $t('storage_cleanup') }}</text>
 				<text class="item-arrow"></text>
 			</view>
 
@@ -98,28 +103,24 @@
 				})
 			},
 			onSecurityPrivacy() {
-				uni.showToast({
-					title: '安全隐私功能开发中',
-					icon: 'none'
-				});
-			},
-			onLanguageChange() {
-				uni.showToast({
-					title: '语言切换功能开发中',
-					icon: 'none'
+				uni.navigateTo({
+					url: "/pages/mine/security-privacy"
 				});
 			},
 			onNotificationSettings() {
-				uni.showToast({
-					title: '通知设置功能开发中',
-					icon: 'none'
+				uni.navigateTo({
+					url: "/pages/mine/notification-settings"
 				});
 			},
 			onStorageCleanup() {
-				uni.showToast({
-					title: '清理存储功能开发中',
-					icon: 'none'
+				uni.navigateTo({
+					url: "/pages/mine/storage-cleanup"
 				});
+			},
+			navigateToLanguageSettings() {
+				uni.navigateTo({
+					url: "/pages/mine/mine-language"
+				})
 			},
 			onDarkMode() {
 				uni.navigateTo({
@@ -140,6 +141,14 @@
 		computed: {
 			userInfo() {
 				return this.$store.state.userStore.userInfo;
+			},
+			avatar_meerkat_Url() {
+				const avatar = this.$store.state.userStore.userInfo.headImage
+				if(avatar) {
+					return avatar
+				} else {
+					return '@/static/image/meerkat.png'
+				}
 			}
 		}
 	}
