@@ -27,6 +27,16 @@
 				<text class="item-text">{{ $t('device_management') }}</text>
 				<text class="item-arrow">></text>
 			</view>
+
+			<view class="settings-item" @click="fn=()=>{}">
+				<text class="item-text">{{ $t('she_bei_quan_xian_qing_dan') }}</text>
+				<text class="item-arrow">></text>
+			</view>
+
+			<view class="settings-item" @click="fn=()=>{}">
+				<text class="item-text">{{ $t('ge_ren_xin_xi_shou_ji_qing_dan') }}</text>
+				<text class="item-arrow">></text>
+			</view>
 		</view>
 	</view>
 </template>

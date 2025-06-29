@@ -42,21 +42,21 @@
 			<view class="settings-item" @click="onSecurityPrivacy()">
 				<image class="item-icon" src="@/static/settings/security_privacy.png"></image>
 				<!-- <text class="item-icon iconfont icon-security"></text> -->
-				<text class="item-text">安全隐私</text>
+				<text class="item-text">{{ $t('security_privacy') }}</text>
 				<text class="item-arrow"></text>
 			</view>
 
 			<view class="settings-item" @click="navigateToLanguageSettings()">
 				<image class="item-icon" src="@/static/settings/language.png"></image>
 				<!-- <text class="item-icon iconfont icon-language"></text> -->
-				<text class="item-text">语言切换</text>
+				<text class="item-text">{{ $t('yu_yan_qie_huan') }}</text>
 				<text class="item-arrow"></text>
 			</view>
 
 			<view class="settings-item" @click="onNotificationSettings()">
 				<image class="item-icon" src="@/static/settings/bell.png"></image>
 				<!-- <text class="item-icon iconfont icon-notification"></text> -->
-				<text class="item-text">通知设置</text>
+				<text class="item-text">{{ $t('tong_zhi_she_zhi') }}</text>
 				<text class="item-arrow"></text>
 			</view>
 
@@ -70,7 +70,7 @@
 			<view class="settings-item" @click="onDarkMode()">
 				<image class="item-icon" src="@/static/settings/dark_mode_switch.png"></image>
 				<!-- <text class="item-icon iconfont icon-theme"></text> -->
-				<text class="item-text">深色模式</text>
+				<text class="item-text">{{ $t('shen_se_mo_shi') }}</text>
 				<text class="item-arrow"></text>
 			</view>
 

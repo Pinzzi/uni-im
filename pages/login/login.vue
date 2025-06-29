@@ -94,8 +94,8 @@ export default {
 		return {
 			loginForm: {
 				terminal: 1,
-				userName: '',
-				password: '',
+				userName: 'mockUser',
+				password: 'mockUser1122',
 				deviceId: ''
 			},
 			rules: {},
@@ -133,6 +133,16 @@ export default {
 			return deviceLockout > Date.now()
 		},
 	},
+	watch: {
+		'loginForm.password': {
+			handler(newValue) {
+				// 自动过滤掉密码中的空格
+				if (newValue && newValue.includes(' ')) {
+					this.loginForm.password = newValue.replace(/\s/g, '');
+				}
+			}
+		}
+	},
 	methods: {
 		createRules() {
 			return {
@@ -147,11 +157,11 @@ export default {
 						required: true,
 						errorMessage: uni.$t('qing_shu_ru_mi_ma')
 					}, {
-						minLength: 16,
-						errorMessage: uni.$t('mi_ma_chang_du_bu_neng_xiao_yu_16')
+						minLength: 8,
+						errorMessage: uni.$t('mi_ma_chang_du_bu_neng_xiao_yu_8')
 					}, {
 						// pattern: /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[+/=_\-@#$%^&*!])[A-Za-z\d+/=_\-@#$%^&*!]{8,}$/, // 需包含大小写字母、数字或特殊字符
-						pattern: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{16,}$/, // 16位数字或字母
+						pattern: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/, // 8位及以上数字和字母组合
 						errorMessage: uni.$t('mi_ma_ge_shi_cuo_wu')
 					}]
 				}

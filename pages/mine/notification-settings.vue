@@ -30,7 +30,7 @@
 			<view class="group-title">{{ $t('do_not_disturb') }}</view>
 
 			<view class="settings-item">
-				<text class="item-text">{{ $t('enable_dnd') }}</text>
+				<text class="item-text">{{ $t('qi_yong') }}</text>
 				<switch :checked="settings.dndEnabled" @change="toggleDND" />
 			</view>
 
